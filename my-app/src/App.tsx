@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 import { supermemo, SuperMemoItem, SuperMemoGrade } from "supermemo";
 //Components
+import Layout from "./components/Layout";
 import NavButtons from "./components/NavButtons";
 import ReviewCollections from "./components/Collections/ReviewCollections";
 import CreateCollection from "./components/Collections/CreateCollection";
@@ -150,50 +151,9 @@ function App() {
 
   return (
     <>
-      <Flex
-        flexDir={"column"}
-        align="center"
-        justify="center"
-        minH="100vh"
-        bg="#F3F5F7"
-        boxShadow={"rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"}
-        w="100%"
-      >
-        <NavButtons setNavVal={setNavVal} navVal={navVal} />
-        <Flex
-          w="50%"
-          minH="400px"
-          borderRadius={5}
-          flexDir="column"
-          align="center"
-          justify="space-between"
-          mt={4}
-          p={8}
-          bg="white"
-        >
-          <Flex
-            h="15%"
-            w="100%"
-            flexDir={"column"}
-            align={"center"}
-            justify="center"
-          >
-            <SectionTitles navVal={navVal} />
-            <Divider />
-          </Flex>
-          <Flex w="100%" align={"center"} justify="center">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/auth" element={<Auth />} />
-
-              <Route
-                path="/collections"
-                element={<Collections location={location} />}
-              />
-            </Routes>
-          </Flex>
-        </Flex>
-      </Flex>
+      <Layout>
+        <h1>hello</h1>
+      </Layout>
     </>
   );
 }
@@ -202,3 +162,49 @@ export default App;
 
 //ALlow users to create cards without making an account
 //They can only save cards if they make an account
+{
+  /* <Flex
+flexDir={"column"}
+align="center"
+justify="center"
+minH="100vh"
+bg="#F3F5F7"
+boxShadow={"rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"}
+w="100%"
+>
+<NavButtons setNavVal={setNavVal} navVal={navVal} />
+<Flex
+  w="50%"
+  minH="400px"
+  borderRadius={5}
+  flexDir="column"
+  align="center"
+  justify="space-between"
+  mt={4}
+  p={8}
+  bg="white"
+>
+  <Flex
+    h="15%"
+    w="100%"
+    flexDir={"column"}
+    align={"center"}
+    justify="center"
+  >
+    <SectionTitles navVal={navVal} />
+    <Divider />
+  </Flex>
+  <Flex w="100%" align={"center"} justify="center">
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/auth" element={<Auth />} />
+
+      <Route
+        path="/collections"
+        element={<Collections location={location} />}
+      />
+    </Routes>
+  </Flex>
+</Flex>
+</Flex> */
+}
