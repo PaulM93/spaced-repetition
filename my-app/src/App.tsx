@@ -8,18 +8,22 @@ import {
 } from "react-router-dom";
 import { supermemo, SuperMemoItem, SuperMemoGrade } from "supermemo";
 //Components
-import Layout from "./components/Layout";
-import NavButtons from "./components/NavButtons";
+import Layout from "./components/Layouts/MainLayout";
+import LandingPage from "./pages/LandingPage";
+import AddCollection from "./pages/AddCollection";
 import ReviewCollections from "./components/Collections/ReviewCollections";
 import CreateCollection from "./components/Collections/CreateCollection";
 import SectionTitles from "./components/SectionTitles";
 import { Button, Box, Flex, Divider, ChakraProvider } from "@chakra-ui/react";
 //Pages
-import Home from "./pages/index";
-import Auth from "./pages/auth";
+import Home from "./pages/LandingPage";
+import Signin from "./pages/Signin";
+import Signup from "./pages/Signup";
 import Collections from "./pages/Collections";
+import { Sign } from "crypto";
 
-function App() {
+function App({ props }) {
+  console.log("App props", props);
   //We create the flashcard -- pass in the data --- front and back through inputs
   //Store all flashcards in a "review" array
   //Run through all the flashcards depending on the due date
@@ -126,85 +130,42 @@ function App() {
   // interval: inter-repetition interval after the repetitions (in days). The initial interval value should be 0.
   // efactor: easiness factor reflecting the easiness of memorizing and retaining a given item in memory. The initial efactor value should be 2.5.
   //Button State
-  const [navVal, setNavVal] = useState("Review Cards");
-  let markup;
-  switch (navVal) {
-    case "Add Collection":
-      markup = (
-        <CreateCollection
-          setNavVal={setNavVal}
-          collections={collections}
-          setCollections={setCollections}
-        />
-      );
-      break;
-    case "Review Cards":
-      markup = (
-        <ReviewCollections
-          setCollections={setCollections}
-          collections={collections}
-        />
-      );
-      break;
-    default:
-  }
+  // const [navVal, setNavVal] = useState("Review Cards");
+  // let markup;
+  // switch (navVal) {
+  //   case "Add Collection":
+  //     markup = (
+  //       <CreateCollection
+  //         setNavVal={setNavVal}
+  //         collections={collections}
+  //         setCollections={setCollections}
+  //       />
+  //     );
+  //     break;
+  //   case "Review Cards":
+  //     markup = (
+  //       <ReviewCollections
+  //         setCollections={setCollections}
+  //         collections={collections}
+  //       />
+  //     );
+  //     break;
+  //   default:
+  // }
 
   return (
     <>
       <Layout>
-        <h1>hello</h1>
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/user" element={<Collections />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/signin" element={<Signin />} />
+          {/* <Route path="/addCollection" element={<AddCollection />} /> */}
+        </Routes>
       </Layout>
     </>
   );
 }
 
 export default App;
-
-//ALlow users to create cards without making an account
-//They can only save cards if they make an account
-{
-  /* <Flex
-flexDir={"column"}
-align="center"
-justify="center"
-minH="100vh"
-bg="#F3F5F7"
-boxShadow={"rgba(100, 100, 111, 0.2) 0px 7px 29px 0px"}
-w="100%"
->
-<NavButtons setNavVal={setNavVal} navVal={navVal} />
-<Flex
-  w="50%"
-  minH="400px"
-  borderRadius={5}
-  flexDir="column"
-  align="center"
-  justify="space-between"
-  mt={4}
-  p={8}
-  bg="white"
->
-  <Flex
-    h="15%"
-    w="100%"
-    flexDir={"column"}
-    align={"center"}
-    justify="center"
-  >
-    <SectionTitles navVal={navVal} />
-    <Divider />
-  </Flex>
-  <Flex w="100%" align={"center"} justify="center">
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/auth" element={<Auth />} />
-
-      <Route
-        path="/collections"
-        element={<Collections location={location} />}
-      />
-    </Routes>
-  </Flex>
-</Flex>
-</Flex> */
-}

@@ -1,12 +1,17 @@
 import React from "react";
 import { Tooltip } from "@chakra-ui/react";
 
-export default function CustomTooltip({ children }) {
+interface CustomTooltipProps {
+  label: string;
+  children: any;
+}
+
+export default function CustomTooltip({ children, label }: CustomTooltipProps) {
   return (
     <>
       <Tooltip
         border="1px solid white"
-        label="Change card order"
+        label={label}
         bg="blackAlpha"
         borderRadius="5px"
       >
