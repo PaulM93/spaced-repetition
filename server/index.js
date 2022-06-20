@@ -2,13 +2,9 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const bcrypt = require("bcrypt");
-const uuid = require("uuid");
-const guard = require("express-jwt-permissions")();
-const { expressjwt: expressJwt } = require("express-jwt");
 const jwt = require("jsonwebtoken");
-const jwks = require("jwks-rsa");
-const oAuth = require("./middleware/oAuth");
-
+//Middlewear
+const authenticateToken = require("./middleware/authenticateToken");
 //Cors
 const corsOptions = {
   origin: "http://localhost:3001",
@@ -21,103 +17,16 @@ require("dotenv").config();
 
 const port = process.env.PORT || 3001;
 
-// app.use(
-//   expressJwt({
-//     secret: jwks.expressJwtSecret({
-//       cache: true,
-//       rateLimit: true,
-//       jwksRequestsPerMinute: 5,
-//       jwksUri: "https://dev-f6e5vo5z.us.auth0.com/.well-known/jwks.json",
-//     }),
-//     audience: "https://www.spaced-repetition-api.com",
-//     issuer: "https://dev-f6e5vo5z.us.auth0.com/",
-//     algorithms: ["RS256"],
-//   })
-// );
-// app.use(jwtCheck);
-
-//Import mysql
 const mysql = require("mysql");
 
-//Set up database connection
 const db = mysql.createConnection({
-  user: "root", //standard terminology
   host: "localhost",
+  user: "root",
   password: "password",
   database: "spacedrepetition",
 });
+
 db.connect();
-
-// function createUser(user, callback) {
-//   const mysql = require("mysql");
-//   const bcrypt = require("bcrypt");
-
-//   const connection = mysql.createConnection({
-//     host: "localhost",
-//     user: "me",
-//     password: "secret",
-//     database: "mydb",
-//   });
-
-//   connection.connect();
-
-//   const query = "INSERT INTO users SET ?";
-
-//   bcrypt.hash(user.password, 10, function (err, hash) {
-//     if (err) return callback(err);
-
-//     const insert = {
-//       password: hash,
-//       email: user.email,
-//     };
-
-//     connection.query(query, insert, function (err, results) {
-//       if (err) return callback(err);
-//       if (results.length === 0) return callback();
-//       callback(null);
-//     });
-//   });
-// }
-
-//Guard
-/*
-  The guard is a piece of middlewhere
-  User must have access to the scope "read:collections"
-*/
-// const collectionsAPIEndpoint = "http://localhost:3001/retrieveCollections";
-
-// app.get("/collections", async (req, res) => {
-//   try {
-//     const { access_token } = req.oAuth;
-//     //We get the acess token and attach it to the axios call
-//     const response = await axios({
-//       method: "get",
-//       url: collectionsAPIEndpoint,
-//       headers: { "Authorization": `Bearer ${access_token}` },
-//     });
-//     //If auth correct we return the data
-//     res.json(response.data);
-//   } catch (error) {
-//     if (error.response.status === 401) {
-//       res.status(401).json("Unauthorized to access data");
-//     } else if (error.response.status === 403) {
-//       res.status(403).json("Permission denied");
-//     } else {
-//       res.status(500).json("Whoops, something went wrong");
-//     }
-//   }
-// });
-
-// app.get(
-//   "/retrieveCollections",
-//   guard.check(["read:collections"]),
-//   function (req, res) {
-//     res.json({
-//       collection1: "First collection",
-//       collection2: "second collection",
-//     });
-//   }
-// );
 
 //Users table
 
@@ -144,28 +53,6 @@ db.connect();
 
 */
 
-app.post("/loginTest", (req, res) => {
-  const email = req.body.email;
-  const password = req.body.password;
-
-  db.query(
-    //Select user where username and password are correct
-    "SELECT * FROM users WHERE username = ? AND password = ?",
-    [username, password],
-    (err, result) => {
-      if (err) {
-        res.send({ err: err });
-      }
-
-      if (result) {
-        res.send(result);
-      } else {
-        res.send({ message: "Wrong username/password combination" });
-      }
-    }
-  );
-});
-
 //Create User -- brcypt is sync
 app.post("/users", async (req, res) => {
   try {
@@ -178,6 +65,7 @@ app.post("/users", async (req, res) => {
       const insert = {
         password: hash,
         email: req.body.email,
+        //userID automatically created
       };
 
       //Query to insert daya into mysql
@@ -187,7 +75,7 @@ app.post("/users", async (req, res) => {
         }
 
         if (result) {
-          res.send({ result: result });
+          res.send({ message: "User successfully created", result: result });
           //Get user data here
         }
       });
@@ -197,20 +85,9 @@ app.post("/users", async (req, res) => {
   }
 });
 
-//Login route
-// app.post("/login", async (req, res) => {
-//   //Check if user exists in database
-//   try {
-//     if (bycrpt.compare(req.body.password, user.password)) {
-//       console.log("Same");
-//     } else {
-//       res.send("Not allowed");
-//     }
-//   } catch {}
-// });
-
 //Retrieve users
 app.get("/users", (req, res) => {
+  //use middlewear === where email address stored in jwt token === email in users table
   db.query("SELECT * FROM USERS", (err, result) => {
     if (err) {
       console.log(err);
@@ -225,6 +102,7 @@ const users = [
   {
     email: "paulmarley1993@outlook.com",
     bio: "fat",
+    other: "sdfsd",
   },
   {
     email: "Jim@gmail.com",
@@ -232,9 +110,36 @@ const users = [
   },
 ];
 
-//Middlewear
-app.get("/posts", autenticateToken, (req, res) => {
-  console.log("here", req.user.email);
+/**
+ 
+  User tabel 
+  - userID
+  - email
+  - password
+  - primary key
+  - collections
+
+
+ Collections table
+ - Title
+ - Description 
+ - Category 
+ - Created At
+ - Cards 
+ - userID
+
+ Cards 
+- Front
+- Back 
+
+ */
+
+//Using middlewear to ensure it's the correct user -- we are using the user email address
+app.get("/posts", authenticateToken, (req, res) => {
+  //Get all posts where the user email in the jwt === the email in the database
+  //Better to use the userID instead of email
+
+  console.log("User Obj JWT", req.user);
   //User the middlewear to verify that it is the correct user
   //We only have access to the data in the users where this is correct
   res.json(users.filter((user) => user.email === req.user.email));
@@ -242,53 +147,62 @@ app.get("/posts", autenticateToken, (req, res) => {
 
 //Login route
 app.post("/login", (req, res) => {
-  const emailVal = "paulmarley1993@outlook.com";
-  const passwordVal = "password";
+  const emailVal = req.body.email;
+  const password = req.body.password;
 
   //Retrieve the password from the database depending on the useremailVal
 
   //Authenticate the user
   try {
-    //Compare the input password with the database password
-    if (bcrypt.compare(req.body.password, passwordVal)) {
-      //Password is the same
-      const email = emailVal;
-      //Create jwt with userinfo -- we could do this with the email
-      const user = { email: email };
-      const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET); //create a random access token
-      //Return the acces token which has the user info saved inside it
-      //If the password etc matches we return the access token
-      res.json({ accessToken: accessToken });
-    } else {
-      res.send("Not allowed");
-    }
+    db.query(
+      //Select user where username and password are correct
+      "SELECT * FROM users WHERE email = ?",
+      [emailVal],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+          //If incorrect an error is returned
+          res.send({ err: err });
+        }
+        if (result.length === 0) {
+          res.send("No user with this email exists");
+        } else {
+          //If there is a user we can compare the password and return an authtoken
+          if (result) {
+            //Compare the input password with the database password
+            if (bcrypt.compareSync(password, result[0].password)) {
+              //Password is the same
+              console.log("result", result);
+              const email = emailVal;
+              const userID = result[0].userId;
+              //Create jwt with userinfo -- we could do this with the userID
+              const user = { email: email, userID: userID };
+              const accessToken = jwt.sign(
+                user,
+                process.env.ACCESS_TOKEN_SECRET
+              ); //create a random access token
+              //Return the access token which has the user info saved inside it
+              //If the password etc matches we return the access token
+              res.json({
+                message: "Successfully signed in",
+                accessToken: accessToken,
+              });
+            } else {
+              //Potential incorrect password etc
+              res.send("Not allowed");
+            }
+          } else {
+            //If incorrect an error is returned
+            res.send({ message: "Wrong username/password combination" });
+          }
+        }
+      }
+    );
   } catch (err) {
     console.log(err);
     res.send(err);
   }
 });
-
-//Middleware
-function autenticateToken(req, res, next) {
-  //get the token
-  //verify that it is the correct user
-  //return the user
-
-  //We get the authroization header and set the token
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-  //Check if token is null to deny access
-  if (token == null) return res.sendStatus(401);
-
-  //Verify the token
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
-    //set the user
-    req.user = user;
-    //move on from middlwear
-    next();
-  });
-}
 
 app.listen(3001, () => {
   console.log("Running");
