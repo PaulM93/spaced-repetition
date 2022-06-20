@@ -6,7 +6,7 @@ const oAuth = (req, res, next) => {
   const code = req.query.code;
 
   if (!code) {
-    res.tatus(401).send("Missing autho code");
+    res.status(401).send("Missing autho code");
   }
 
   const params = new URLSearchParams();
