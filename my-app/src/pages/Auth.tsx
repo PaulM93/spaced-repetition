@@ -1,11 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 import axios from "axios";
 import {
-  Box,
   Input,
-  Text,
   VStack,
   InputRightElement,
   FormControl,
@@ -16,14 +12,19 @@ import {
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 //Components
+import AuthButton from "../components/Auth/AuthButton";
 import AuthLayout from "../components/Layouts/AuthLayout";
+import HelperText from "../components/Auth/HelperText";
 
-export default function Signup() {
+interface AuthPageProps {
+  page: string;
+}
+
+export default function AuthPage({ page }: AuthPageProps) {
   const toast = useToast();
   const [show, setShow] = useState<boolean>(false);
   const handleShow = () => setShow(!show);
   const [loading, setLoading] = useState<boolean>(false);
-  const [whileHover, setWhileHover] = useState<boolean>(false);
 
   //User State
   const [userDetails, setUserDetails] = useState({
@@ -69,45 +70,83 @@ export default function Signup() {
     setUserDetails(resetObj);
   };
 
+  const toasty = (
+    message: string,
+    type: "loading" | "info" | "warning" | "success" | "error"
+  ) => {
+    return toast({
+      title: message,
+      status: type,
+      position: "bottom-left",
+      isClosable: true,
+    });
+  };
+
+  const signin = () => {
+    axios
+      .post("/login", userDetails)
+      .then((res) => {
+        clearFields();
+        setLoading(false);
+        toasty("Signed in", "success");
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+        toasty("There was an error", "error");
+      });
+  };
+
+  const signup = () => {
+    axios
+      .post("/users", userDetails)
+      .then((res) => {
+        clearFields();
+        setLoading(false);
+        toasty("Profile Created", "success");
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+        toasty("There was an error", "error");
+      });
+  };
+
   //Check if card already exists
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: any) => {
     e.preventDefault();
     setLoading(true);
     if (handleValidation()) {
-      axios
-        .post("/users", userDetails)
-        .then((res) => {
-          console.log("success", res);
-          clearFields();
-          setLoading(false);
-          toast({
-            title: "Profile Created",
-            status: "success",
-            position: "bottom-left",
-            isClosable: true,
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          setLoading(false);
-          toast({
-            title: "There was an error",
-            status: "error",
-            position: "bottom-left",
-            isClosable: true,
-          });
-        });
+      page === "signin" ? signin() : signup();
     } else {
       setLoading(false);
     }
   };
 
+  let title: string,
+    subtitle: string,
+    ariaLabel: string,
+    buttonText: string,
+    url: string,
+    helperText: string;
+  if (page === "signin") {
+    title = "Welcome Back";
+    subtitle = "Your brain thanks you.";
+    ariaLabel = "Sign in";
+    buttonText = "Train your brain";
+    helperText = "Already have an account?";
+    url = "/signin";
+  } else {
+    title = "Welcome to Spaced";
+    subtitle = "Train your brain with spaced repetition.";
+    ariaLabel = "Sign up";
+    buttonText = "Get Started";
+    helperText = "Dont have an account?";
+    url = "/signup";
+  }
   return (
     <>
-      <AuthLayout
-        title={"Welcome to Spaced"}
-        subtitle={"Train your brain with spaced repetition."}
-      >
+      <AuthLayout title={title} subtitle={subtitle}>
         <VStack spacing={3} mt={10} w="100%">
           <FormControl isRequired isInvalid={errors.email}>
             <Input
@@ -165,57 +204,17 @@ export default function Signup() {
               ""
             )}
           </FormControl>
-          <Box
-            position={"relative"}
-            width="100%"
-            onClick={(e) => handleSubmit(e)}
-          >
-            <motion.button
-              style={{
-                borderRadius: "7px",
-                padding: "10px 20px 10px 20px",
-                color: "white",
-                width: "100%",
-                fontSize: "16px",
-                background: "#7928CA",
-                border: "1px solid #7928CA",
-                position: "absolute",
-              }}
-              initial={{ opacity: 1 }}
-              animate={{
-                opacity: whileHover ? 0 : 1,
-                transition: { duration: 0.5 },
-              }}
-              aria-label={"Sign up"}
-            >
-              {!loading ? "Get Started" : "Loading..."}
-            </motion.button>
-            <motion.button
-              onHoverStart={() => setWhileHover(true)}
-              onHoverEnd={() => setWhileHover(false)}
-              style={{
-                borderRadius: "7px",
-                width: "100%",
-                padding: "10px 20px 10px 20px",
-                color: "#ffffffb3",
-                fontSize: "16px",
-                border: "1px solid #ffffffb3",
-              }}
-              initial={{ opacity: 0 }}
-              animate={{
-                opacity: whileHover ? 1 : 0,
-                transition: { duration: 0.5 },
-              }}
-            >
-              {!loading ? "Get Started" : "Loading..."}
-            </motion.button>
-          </Box>
-          <Text fontSize={"sm"} color="#ffffffb3">
-            Already have an account?{" "}
-            <Link to="/signin">
-              <span style={{ color: "#ffffff" }}>Sign in</span>
-            </Link>
-          </Text>
+          <AuthButton
+            loading={loading}
+            buttonText={buttonText}
+            ariaLabel={ariaLabel}
+            handleSubmit={handleSubmit}
+          />
+          <HelperText
+            helperText={helperText}
+            url={url}
+            buttonText={ariaLabel}
+          />
         </VStack>
       </AuthLayout>
     </>

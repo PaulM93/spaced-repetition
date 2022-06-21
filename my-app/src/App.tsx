@@ -10,17 +10,10 @@ import { supermemo, SuperMemoItem, SuperMemoGrade } from "supermemo";
 //Components
 import Layout from "./components/Layouts/MainLayout";
 import LandingPage from "./pages/LandingPage";
-import AddCollection from "./pages/AddCollection";
-import ReviewCollections from "./components/Collections/ReviewCollections";
-import CreateCollection from "./components/Collections/CreateCollection";
-import SectionTitles from "./components/SectionTitles";
-import { Button, Box, Flex, Divider, ChakraProvider } from "@chakra-ui/react";
 //Pages
 import Home from "./pages/LandingPage";
-import Signin from "./pages/Signin";
-import Signup from "./pages/Signup";
+import Auth from "./pages/Auth";
 import Collections from "./pages/Collections";
-import { Sign } from "crypto";
 
 function App({ props }) {
   console.log("App props", props);
@@ -159,8 +152,8 @@ function App({ props }) {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/user" element={<Collections />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/signin" element={<Signin />} />
+          <Route path="/signup" element={<Auth page={"signup"} />} />
+          <Route path="/signin" element={<Auth page={"signin"} />} />
           {/* <Route path="/addCollection" element={<AddCollection />} /> */}
         </Routes>
       </Layout>
@@ -169,3 +162,22 @@ function App({ props }) {
 }
 
 export default App;
+
+/*
+  Tables
+  //////
+  1) Users
+  2) Collections -- each collection is assosiated with a user -- store cards as json array 
+
+
+  //Auth Process
+  1) User signs in / up
+  2) Taken to their collection page
+
+  Collection Page
+  ///////////////
+  - User Can add new collection 
+  - User Can delete a collection
+  - User Can edit a collection
+
+*/

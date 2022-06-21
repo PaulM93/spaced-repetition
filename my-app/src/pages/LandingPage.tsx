@@ -18,6 +18,7 @@ import {
   calc,
   transition,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
 
 export default function Landing() {
   return (
@@ -73,20 +74,22 @@ export default function Landing() {
         </Heading>
       </VStack>
       <Box position={"relative"}>
-        <motion.button
-          style={{
-            position: "relative",
-            borderRadius: "5px",
-            background: "white",
-            fontWeight: "500",
-            marginRight: "10px",
-            color: "black",
-            padding: "10px 20px 10px 20px",
-            border: "1px solid white",
-          }}
-        >
-          Train your brain
-        </motion.button>
+        <Link to="/signup">
+          <motion.button
+            style={{
+              position: "relative",
+              borderRadius: "5px",
+              background: "white",
+              fontWeight: "500",
+              marginRight: "10px",
+              color: "black",
+              padding: "10px 20px 10px 20px",
+              border: "1px solid white",
+            }}
+          >
+            Train your brain
+          </motion.button>
+        </Link>
         <motion.button
           style={{
             position: "relative",

@@ -32,7 +32,7 @@ export default function AuthLayout({
 
   return (
     <Flex flexDir={"column"} align="center" minW="100%" mt={"100px"}>
-      <Flex flexDir={"column"} w={["95%", "80%", "45%", "45%"]}>
+      <Flex flexDir={"column"} w={["95%", "80%", "60%", "45%"]}>
         <VStack align={"flex-start"}>
           <Heading
             color="white"

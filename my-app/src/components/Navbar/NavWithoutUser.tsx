@@ -4,8 +4,7 @@ import NavButton from "./NavButton";
 import Logo from "./Logo";
 import SignupButton from "./SignupButton";
 ////////
-import { Flex, Text, HStack, Icon } from "@chakra-ui/react";
-import { FiCircle } from "react-icons/fi";
+import { Flex, HStack } from "@chakra-ui/react";
 
 export default function NavWithoutUser() {
   return (
