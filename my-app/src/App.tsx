@@ -13,7 +13,7 @@ import LandingPage from "./pages/LandingPage";
 //Pages
 import Home from "./pages/LandingPage";
 import Auth from "./pages/Auth";
-import Collections from "./pages/Collections";
+import Dashboard from "./pages/Dashboard";
 
 function App({ props }) {
   console.log("App props", props);
@@ -151,7 +151,7 @@ function App({ props }) {
       <Layout>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/user" element={<Collections />} />
+          <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/signup" element={<Auth page={"signup"} />} />
           <Route path="/signin" element={<Auth page={"signin"} />} />
           {/* <Route path="/addCollection" element={<AddCollection />} /> */}

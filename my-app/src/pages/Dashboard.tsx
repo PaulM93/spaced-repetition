@@ -26,6 +26,9 @@ export default function Collections(props) {
   // }, [code]);
   const [orderDisplay, setOrderDisplay] = useState(false);
 
+  //When we get here we want to load the user collections using the token
+  //with useEffect
+
   return (
     <>
       {/* //Put in grid */}

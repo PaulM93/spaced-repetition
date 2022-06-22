@@ -1,5 +1,7 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { logout, reset } from "../../features/auth/authSlice";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 //Components
 import NavButton from "./NavButton";
@@ -7,9 +9,32 @@ import Logo from "./Logo";
 import Feedback from "./Feedback";
 import CustomTooltip from "../Util/CustomTooltip";
 ////////
-import { Flex, HStack, Icon, IconButton, Avatar } from "@chakra-ui/react";
+import {
+  Flex,
+  HStack,
+  Icon,
+  IconButton,
+  Avatar,
+  useToast,
+} from "@chakra-ui/react";
 import { DragHandleIcon } from "@chakra-ui/icons";
 export default function AuthNavbar() {
+  const toast = useToast();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const signUserOut = () => {
+    dispatch<any>(logout());
+    dispatch(reset());
+    navigate("/");
+    toast({
+      title: "Signed out",
+      status: "success",
+      position: "bottom-left",
+      isClosable: true,
+    });
+  };
+
   return (
     <Flex
       pt={2}
@@ -69,6 +94,18 @@ export default function AuthNavbar() {
                 Add Collection
               </motion.button>
             </Link>
+            <motion.button
+              onClick={() => signUserOut()}
+              style={{
+                borderRadius: "7px",
+                padding: "5px 10px 5px 10px",
+                color: "#1DB954",
+                fontSize: "12px",
+                border: "1px solid #1DB954",
+              }}
+            >
+              Logout
+            </motion.button>
           </HStack>
         </Flex>
       </Flex>
