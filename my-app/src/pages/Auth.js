@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 //Functions to dispatch
 import { signup, signin, reset } from "../features/auth/authSlice";
-import axios from "axios";
 import {
   Input,
   VStack,
@@ -45,7 +44,9 @@ export default function AuthPage({ page }) {
       //We navigate to the dashboard
       navigate("/dashboard");
       clearFields();
-      toasty("Successfully signed up", "success");
+      const toastMessage =
+        page === "signin" ? "Successfully signed in" : "Successfully signed up";
+      toasty(toastMessage, "success");
       //We then dispatch the reset reducer in authSlice to reset loading, errors etc
       dispatch(reset());
     }
@@ -110,44 +111,10 @@ export default function AuthPage({ page }) {
     });
   };
 
-  // const signin = () => {
-  //   axios
-  //     .post("/login", userDetails)
-  //     .then((res) => {
-  //       clearFields();
-  //       setLoading(false);
-  //       toasty("Signed in", "success");
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //       setLoading(false);
-  //       toasty("There was an error", "error");
-  //     });
-  // };
-
-  const signupUser = () => {
-    //Dispatch signup function in redux
-    dispatch(signup(userDetails));
-
-    // axios
-    //   .post("/users", userDetails)
-    //   .then((res) => {
-    //     clearFields();
-    //     setLoading(false);
-    //     toasty("Profile Created", "success");
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     setLoading(false);
-    //     toasty("There was an error", "error");
-    //   });
-  };
-
   //Check if card already exists
   const handleSubmit = (e) => {
     e.preventDefault();
     if (handleValidation()) {
-      signupUser();
       page === "signin"
         ? dispatch(signin(userDetails))
         : dispatch(signup(userDetails));
