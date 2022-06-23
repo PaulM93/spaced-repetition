@@ -35,6 +35,9 @@ exports.updateUser = (req, res) => {
       return console.error(error.message);
     }
     console.log(results);
+    res.status(200).send({
+      message: "Profile Updated",
+    });
     res.send(results);
   });
 };

@@ -1,22 +1,16 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { logout, reset } from "../../features/auth/authSlice";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 //Components
 import NavButton from "./NavButton";
+import NavMenu from "./NavMenu";
 import Logo from "./Logo";
 import Feedback from "./Feedback";
 import CustomTooltip from "../Util/CustomTooltip";
 ////////
-import {
-  Flex,
-  HStack,
-  Icon,
-  IconButton,
-  Avatar,
-  useToast,
-} from "@chakra-ui/react";
+import { Flex, HStack, Icon, IconButton, useToast } from "@chakra-ui/react";
 import { DragHandleIcon } from "@chakra-ui/icons";
 export default function AuthNavbar() {
   const toast = useToast();
@@ -62,7 +56,7 @@ export default function AuthNavbar() {
           <Logo />
           <Flex align="center">
             <Feedback />
-            <Avatar size="xs" ml={2} bg="#1DB954" />
+            <NavMenu signUserOut={signUserOut} />
           </Flex>
         </Flex>
         <Flex h="50%" width="100%" align="center" justify={"space-between"}>
@@ -86,26 +80,14 @@ export default function AuthNavbar() {
                 style={{
                   borderRadius: "7px",
                   padding: "5px 10px 5px 10px",
-                  color: "#1DB954",
+                  color: "#FF0080",
                   fontSize: "12px",
-                  border: "1px solid #1DB954",
+                  border: "1px solid #FF0080",
                 }}
               >
                 Add Collection
               </motion.button>
             </Link>
-            <motion.button
-              onClick={() => signUserOut()}
-              style={{
-                borderRadius: "7px",
-                padding: "5px 10px 5px 10px",
-                color: "#1DB954",
-                fontSize: "12px",
-                border: "1px solid #1DB954",
-              }}
-            >
-              Logout
-            </motion.button>
           </HStack>
         </Flex>
       </Flex>

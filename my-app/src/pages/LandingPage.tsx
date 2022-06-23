@@ -1,23 +1,6 @@
 import React from "react";
-import { motion, Reorder } from "framer-motion";
-import {
-  Button,
-  Box,
-  Flex,
-  Divider,
-  Text,
-  Heading,
-  HStack,
-  Grid,
-  Icon,
-  Tooltip,
-  GridItem,
-  IconButton,
-  Avatar,
-  VStack,
-  calc,
-  transition,
-} from "@chakra-ui/react";
+import { motion } from "framer-motion";
+import { Box, Flex, Heading, VStack } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 export default function Landing() {
@@ -27,11 +10,15 @@ export default function Landing() {
       flexDir="column"
       mt={5}
       minWidth={"100%"}
-      // bg="green"
       alignItems={"center"}
     >
       <VStack spacing={0} height="100%" mb={"60px"}>
-        <Heading fontWeight={900} lineHeight={1} color="white" fontSize="140px">
+        <Heading
+          fontWeight={900}
+          lineHeight={1}
+          color="white"
+          fontSize={["60px", "80px", "100px", "140px"]}
+        >
           Simple.
         </Heading>
         <Box position={"relative"}>
@@ -41,7 +28,7 @@ export default function Landing() {
             bgClip="text"
             fontWeight={900}
             lineHeight={1}
-            fontSize="140px"
+            fontSize={["60px", "80px", "100px", "140px"]}
           >
             Spaced.
           </Heading>
@@ -63,13 +50,18 @@ export default function Landing() {
               bgClip="text"
               fontWeight={900}
               lineHeight={1}
-              fontSize="140px"
+              fontSize={["60px", "80px", "100px", "140px"]}
             >
               Spaced.
             </Heading>
           </motion.h1>
         </Box>
-        <Heading fontWeight={900} lineHeight={1} color="white" fontSize="140px">
+        <Heading
+          fontWeight={900}
+          lineHeight={1}
+          color="white"
+          fontSize={["60px", "80px", "100px", "140px"]}
+        >
           Repetition.
         </Heading>
       </VStack>

@@ -90,8 +90,16 @@ exports.signin = (req, res) => {
               //Password is the same
               const email = emailVal;
               const userID = result[0].userID;
+              const userName = result[0].username;
+              const bio = result[0].bio;
               //Create jwt with userinfo -- we could do this with the userID
-              const user = { email: email, userID: userID };
+              const user = {
+                email: email,
+                userID: userID,
+                userName: userName,
+                bio: bio,
+              };
+              console.log("user", user);
               const accessToken = generateAccessToken(user); //create a random access token
               //Create a refresh token
               const refreshToken = jwt.sign(
@@ -104,6 +112,8 @@ exports.signin = (req, res) => {
               //If the password etc matches we return the access token
               //Also return user data
               res.status(202).send({
+                userName: userName,
+                bio: bio,
                 userID: user.userID,
                 accessToken: accessToken,
                 refreshToken: refreshToken,
@@ -127,4 +137,26 @@ exports.signin = (req, res) => {
     console.log(err);
     res.send(err);
   }
+};
+
+let refreshTokens = [];
+exports.refreshToken = (req, res) => {
+  const refreshToken = req.body.token;
+  console.log("Refresh token", refreshToken);
+  //If no refresh token exists we return status
+  if (refreshToken === null) return res.sendStatus(401);
+  //Check if we have a valid refresh token
+  if (!refreshTokens.includes(refreshToken)) return res.sendStatus(403);
+  //If there is a oken we verify it
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    console.log("Refresh token user", user);
+    //If no err now we can create an access token
+    const accessToken = generateAccessToken({
+      userID: user.userID,
+      email: user.email,
+    }); //if we have a valid refresh token we return an access token
+    //Return the access token
+    res.json({ accessToken: accessToken });
+  });
 };

@@ -12,6 +12,7 @@ import Layout from "./components/Layouts/MainLayout";
 import LandingPage from "./pages/LandingPage";
 //Pages
 import Home from "./pages/LandingPage";
+import Profile from "./pages/Profile";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 
@@ -154,6 +155,7 @@ function App({ props }) {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/signup" element={<Auth page={"signup"} />} />
           <Route path="/signin" element={<Auth page={"signin"} />} />
+          <Route path="/profile" element={<Profile />} />
           {/* <Route path="/addCollection" element={<AddCollection />} /> */}
         </Routes>
       </Layout>
