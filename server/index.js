@@ -1,130 +1,40 @@
 const express = require("express");
+require("dotenv").config();
 const app = express();
 const cors = require("cors");
-const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+app.use(cors());
+app.use(express.json());
 //Middlewear
 const authenticateToken = require("./middleware/authenticateToken");
-//Cors
-const corsOptions = {
-  origin: "http://localhost:3001",
-};
-app.use(cors());
+const generateAccessToken = require("./middleware/generateToken");
+//Port
+const PORT = process.env.PORT || 3001;
 
-app.use(express.json());
-require("dotenv").config();
-// app.use(oAuth);
+//Auth
+const { signup, signin } = require("./handlers/auth");
+//User
+const { getUser, updateUser } = require("./handlers/users");
 
-const port = process.env.PORT || 3001;
-
-const mysql = require("mysql");
-
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "password",
-  database: "spacedrepetition",
-});
-
-db.connect();
-
-//Users table
-
-//Collections table
-//Collections are s
-//Card schema
-
-/*
-    Users table
-            - id
-            -name
-            -country
-
-    Collections table
-            - id
-            - name 
-            - type
-            - id(user)
-
-    Cards table 
-            - data 
-            - id(collections table)
-
-
-*/
-
-//Create User -- brcypt is sync
-app.post("/signup", async (req, res) => {
-  try {
-    //Check if user already exists
-    db.query(
-      "SELECT COUNT(*) AS cnt FROM users WHERE email = ? ",
-      req.body.email,
-      function (err, data) {
-        if (err) {
-          res.status(500).send({ err: err });
-        } else {
-          if (data[0].cnt > 0) {
-            // Already exist
-            return res.status(409).send({ message: "User already exists" });
-          } else {
-            const query = "INSERT INTO users SET ?";
-            bcrypt.hash(req.body.password, 10, function (err, hash) {
-              if (err) return callback(err);
-
-              //Object to insert into the database
-              const insert = {
-                password: hash,
-                email: req.body.email,
-                //userID automatically created
-              };
-
-              //Query to insert daya into mysql
-              db.query(query, insert, function (err, result) {
-                if (err) {
-                  res.send({ err: err });
-                }
-                if (result) {
-                  //insertID identifies userID
-                  const user = { email: insert.email, userID: result.insertId };
-                  const accessToken = generateAccessToken(user); //create a random access token
-                  //Create a refresh token
-                  const refreshToken = jwt.sign(
-                    user,
-                    process.env.REFRESH_TOKEN_SECRET // no expirationd time -- we manually handle this instead of jwt
-                  );
-                  //Store refresh tokens in a db -- find more info
-                  refreshTokens.push(refreshToken);
-                  //Return user data when created
-                  res.status(202).send({
-                    userID: user.userID,
-                    accessToken: accessToken,
-                    refreshToken: refreshToken,
-                  });
-                }
-              });
-            });
-          }
-        }
-      }
-    );
-  } catch (err) {
-    res.status(500).send({ err: err });
-  }
-});
+//Auth Routes
+app.post("/signup", signup);
+app.post("/signin", signin);
+//User Routes
+app.get("/user", authenticateToken, getUser);
+app.post("/user", authenticateToken, updateUser);
 
 //Retrieve users
-app.get("/users", (req, res) => {
-  //use middlewear === where email address stored in jwt token === email in users table
-  db.query("SELECT * FROM USERS", (err, result) => {
-    if (err) {
-      console.log(err);
-    } else {
-      res.send(users);
-      // res.send(result);
-    }
-  });
-});
+// app.get("/users", (req, res) => {
+//   //use middlewear === where email address stored in jwt token === email in users table
+//   db.query("SELECT * FROM USERS", (err, result) => {
+//     if (err) {
+//       console.log(err);
+//     } else {
+//       res.send(users);
+//       // res.send(result);
+//     }
+//   });
+// });
 
 const users = [
   {
@@ -205,82 +115,7 @@ app.get("/posts", authenticateToken, (req, res) => {
   res.json(users.filter((user) => user.email === req.user.email));
 });
 
-//Login route
-app.post("/signin", (req, res) => {
-  const emailVal = req.body.email;
-  const password = req.body.password;
-  //Authenticate the user
-  try {
-    db.query(
-      //Select user where username and password are correct
-      "SELECT * FROM users WHERE email = ?",
-      [emailVal],
-      (err, result) => {
-        if (err) {
-          res.status(500).send({ err: err });
-        }
-        if (result.length === 0) {
-          //No user exists
-          res
-            .status(401)
-            .send({ message: "Wrong username/password combination" });
-        } else {
-          //If there is a user we can compare the password and return an authtoken
-          if (result) {
-            //Compare the input password with the database password
-            if (bcrypt.compareSync(password, result[0].password)) {
-              //Password is the same
-              const email = emailVal;
-              const userID = result[0].userID;
-              //Create jwt with userinfo -- we could do this with the userID
-              const user = { email: email, userID: userID };
-              const accessToken = generateAccessToken(user); //create a random access token
-              //Create a refresh token
-              const refreshToken = jwt.sign(
-                user,
-                process.env.REFRESH_TOKEN_SECRET // no expirationd time -- we manually handle this instead of jwt
-              );
-              //Store refresh tokens in a db -- find more info
-              refreshTokens.push(refreshToken);
-              //Return the access token and refresh token which has the user info saved inside it
-              //If the password etc matches we return the access token
-              //Also return user data
-              res.status(202).send({
-                userID: user.userID,
-                accessToken: accessToken,
-                refreshToken: refreshToken,
-              });
-            } else {
-              //Potential incorrect password etc
-              res
-                .status(401)
-                .send({ message: "Wrong username/password combination" });
-            }
-          } else {
-            //If incorrect an error is returned
-            res
-              .status(401)
-              .send({ message: "Wrong username/password combination" });
-          }
-        }
-      }
-    );
-  } catch (err) {
-    console.log(err);
-    res.send(err);
-  }
-});
-
-//Generate a jwt access token
-function generateAccessToken(user) {
-  //We set the expiry time of the token
-  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-    expiresIn: "30s",
-    // expiresIn: "1000s",
-  });
-}
-
-app.listen(3001, () => {
+app.listen(PORT, () => {
   console.log("Running");
 });
 

@@ -1,21 +1,18 @@
-module.exports = {
-  HOST: "localhost",
-  USER: "root",
-  PASSWORD: "password",
-  DB: "spacedrepetition",
-  dialect: "mysql",
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000,
-  },
+mysql = require("mysql");
+
+const dbConfig = {
+  host: "localhost",
+  user: "root",
+  password: "password",
+  database: "spacedrepetition",
 };
-
-// First five parameters are for MySQL connection.
-// pool is optional, it will be used for Sequelize connection pool configuration:
-
-// max: maximum number of connection in pool
-// min: minimum number of connection in pool
-// idle: maximum time, in milliseconds, that a connection can be idle before being released
-// acquire: maximum time, in milliseconds, that pool will try to get connection before throwing error
+const connection = mysql.createConnection(dbConfig);
+connection.connect(function (err) {
+  if (err) {
+    console.log("error connecting:" + err.stack);
+  }
+  console.log("connected successfully to DB.");
+});
+module.exports = {
+  connection: mysql.createConnection(dbConfig),
+};
