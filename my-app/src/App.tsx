@@ -17,7 +17,6 @@ import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 
 function App({ props }) {
-  console.log("App props", props);
   //We create the flashcard -- pass in the data --- front and back through inputs
   //Store all flashcards in a "review" array
   //Run through all the flashcards depending on the due date

@@ -4,10 +4,10 @@ import { FiFolder, FiLayers } from "react-icons/fi";
 
 interface TitleDisplayProps {
   title: string;
-  cardCount: number;
+  cardsDue: number;
 }
 
-export default function TitleDisplay({ title, cardCount }: TitleDisplayProps) {
+export default function TitleDisplay({ title, cardsDue }: TitleDisplayProps) {
   return (
     <Flex flexDir={"column"}>
       <Flex align="center" mb={2}>
@@ -18,7 +18,7 @@ export default function TitleDisplay({ title, cardCount }: TitleDisplayProps) {
       </Flex>
       <Flex color="#666666" align="center">
         <Text fontSize="sm" mr={2}>
-          {cardCount} {cardCount !== 1 ? "cards" : "card"}
+          {cardsDue} {cardsDue !== 1 ? "cards due" : "card due"}
         </Text>
         <Icon as={FiLayers} />
       </Flex>

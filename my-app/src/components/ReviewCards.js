@@ -19,9 +19,7 @@ import {
 
 function practice(flashcard, grade) {
   const { interval, repetition, efactor } = supermemo(flashcard, grade);
-  const dueDate = dayjs(Date.now())
-    .add(interval, "day")
-    .toISOString();
+  const dueDate = dayjs(Date.now()).add(interval, "day").toISOString();
 
   return { ...flashcard, interval, repetition, efactor, dueDate };
 }
@@ -42,13 +40,12 @@ export default function ReviewCards({
   handleClose,
 }) {
   const [view, setView] = useState(false);
-  //If the card has the due date of today we review it
-  const [cardVal, setCardVal] = useState(0);
+  //If the card has the due date of less than today we review it
 
   //   const frontOfCardMarkup =
   const valueButtonArr = [0, 1, 2, 3, 4, 5];
   const valueButtonMarkup = valueButtonArr.map((val) => (
-    <Button key={val} onClick={() => handleCardActions(val, cardVal)}>
+    <Button key={val} onClick={() => handleCardActions(val)}>
       {val}
     </Button>
     //function on the button which sets the value of the card
@@ -64,7 +61,7 @@ export default function ReviewCards({
     //Supermemo the card
     const newObj = practice(cards[0], val);
     //Card ID -- we are using front text atm
-    const cardID = cards[cardVal].front;
+    const cardID = cards[0].front;
 
     //Filter out the card -- creates new arr without the card
     const filteredCards = cards.filter((item) => item.front !== cardID);
@@ -135,11 +132,11 @@ export default function ReviewCards({
       </Flex>
       {view ? (
         <Heading size="lg" mb={10}>
-          {cards[cardVal].front}
+          {cards[0].front}
         </Heading>
       ) : (
         <Heading size="lg" mb={10}>
-          {cards[cardVal].back}
+          {cards[0].back}
         </Heading>
       )}
       {view ? (

@@ -9,6 +9,7 @@ import NavMenu from "./NavMenu";
 import Logo from "./Logo";
 import Feedback from "./Feedback";
 import CustomTooltip from "../Util/CustomTooltip";
+import AddCollection from "../CollectionsNew/AddEditCollection";
 ////////
 import { Flex, HStack, Icon, IconButton, useToast } from "@chakra-ui/react";
 import { DragHandleIcon } from "@chakra-ui/icons";
@@ -61,33 +62,11 @@ export default function AuthNavbar() {
         </Flex>
         <Flex h="50%" width="100%" align="center" justify={"space-between"}>
           <HStack spacing={1}>
-            <NavButton title={"Overview"} url={"/"} />
+            <NavButton title={"Dashboard"} url={"/dashboard"} />
             <NavButton title={"Settings"} url={"settings"} />
           </HStack>
           <HStack>
-            <Link to="/collectionOrder">
-              <CustomTooltip label={"Change Card Order"}>
-                <IconButton
-                  size="xs"
-                  colorScheme={"grey"}
-                  aria-label="Change Card Order"
-                  icon={<Icon mt={1} as={DragHandleIcon} />}
-                />
-              </CustomTooltip>
-            </Link>
-            <Link to="/addCollection">
-              <motion.button
-                style={{
-                  borderRadius: "7px",
-                  padding: "5px 10px 5px 10px",
-                  color: "#FF0080",
-                  fontSize: "12px",
-                  border: "1px solid #FF0080",
-                }}
-              >
-                Add Collection
-              </motion.button>
-            </Link>
+            <AddCollection type={"add"} collection={null} />
           </HStack>
         </Flex>
       </Flex>

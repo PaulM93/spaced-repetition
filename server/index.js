@@ -21,6 +21,7 @@ const {
   updateCollection,
   deleteCollection,
 } = require("./handlers/collections");
+const dbConfig = require("./config/db.config");
 
 //Auth Routes
 app.post("/signup", signup);
@@ -33,7 +34,7 @@ app.post("/user", authenticateToken, updateUser);
 app.get("/user/collection", authenticateToken, getCollections);
 app.post("/user/collection", authenticateToken, createCollection);
 app.post("/user/collection/update", authenticateToken, updateCollection);
-app.delete("/user/collection/delete", authenticateToken, deleteCollection);
+app.post("/user/collection/delete", authenticateToken, deleteCollection);
 
 /**
  
@@ -43,7 +44,6 @@ app.delete("/user/collection/delete", authenticateToken, deleteCollection);
   - password
   - primary key
   - collections
-
 
  Collections table
  - Title

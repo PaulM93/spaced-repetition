@@ -8,7 +8,7 @@ const SIGNIN_URL = "/signin";
 const signup = async (userData) => {
   //Signup user
   const response = await axios.post(SIGNUP_URL, userData);
-  console.log("Response", response);
+  // console.log("Response", response);
   //We set the access token in local storage to use for requests
   if (response.data) {
     //set token and userdata in local storage

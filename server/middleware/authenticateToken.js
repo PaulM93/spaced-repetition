@@ -13,8 +13,9 @@ const autheticateToken = (req, res, next) => {
 
   //Verify the token
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) return res.sendStatus(403);
-    console.log("User authenticate token", user);
+    if (err) return res.sendStatus(403).send({ message: err });
+    console.log(err);
+    // console.log("User authenticate token", user);
     //set the user
     req.user = user;
     //move on from middlwear

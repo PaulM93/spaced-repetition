@@ -20,6 +20,8 @@ const db = dbConfig.connection;
 //         REFERENCES users(userID)
 //         ON DELETE CASCADE
 //     );
+
+//Get Collections
 exports.getCollections = (req, res) => {
   //CollectionID === req.user.userID
   db.query(
@@ -30,8 +32,9 @@ exports.getCollections = (req, res) => {
         res.status(500).send({ error: error });
       } else {
         if (result.length === 0) {
-          return res.status(200).send({ message: "You have no collections." });
+          return res.status(200).send([]);
         } else {
+          console.log(result);
           res.status(200).send(result);
         }
       }
@@ -39,6 +42,7 @@ exports.getCollections = (req, res) => {
   );
 };
 
+//Create Collectiion
 exports.createCollection = (req, res) => {
   //We want to create a collection here
   const query = "INSERT INTO collections SET?";
@@ -47,6 +51,8 @@ exports.createCollection = (req, res) => {
     title: req.body.title,
     description: req.body.description,
     category: req.body.category,
+    nextStudyDate: "",
+    cards: JSON.stringify([]),
   };
   //Where the user ID === the userID
   db.query(query, insert, function (err, result) {
@@ -56,6 +62,10 @@ exports.createCollection = (req, res) => {
     if (result) {
       console.log(result);
       res.status(200).send({
+        collection: {
+          ...insert,
+          id: result.insertId,
+        },
         message: "Collection Created",
       });
     }
@@ -64,16 +74,20 @@ exports.createCollection = (req, res) => {
 
 //Update Collection
 exports.updateCollection = (req, res) => {
-  const userID = req.user.userID;
+  const id = req.body.id;
   const title = req.body.title;
   const description = req.body.description;
-  const category = req.body.title;
+  const category = req.body.category;
+  const nextStudyDate = req.body.nextStudyDate;
+  console.log("NextStudyDate gerer", nextStudyDate);
+  const cards = JSON.stringify(req.body.cards); //stringify array
   let query =
-    "UPDATE collections SET title = ?, description = ?, category = ? WHERE collectionID = ?";
-  let data = [title, description, category, userID];
+    "UPDATE collections SET title = ?, description = ?, category = ?, cards = ?, nextStudyDate = ? WHERE id = ?";
+  let data = [title, description, category, cards, nextStudyDate, id];
   db.query(query, data, (error, results, fields) => {
     if (error) {
-      return console.error(error.message);
+      console.log(error);
+      res.status(500).send({ message: "There was an error", error: error });
     }
     console.log(results);
     res.status(200).send({
@@ -84,13 +98,15 @@ exports.updateCollection = (req, res) => {
 
 //Delete Collection
 exports.deleteCollection = (req, res) => {
-  const query = "DELETE FROM collections WHERE collectionID =?";
-  let data = [req.body.collectionID];
+  const query = "DELETE FROM collections WHERE id =?";
+  console.log("body", req.body);
+  let data = [req.body.id];
   db.query(query, data, function (error, result) {
     if (error) {
-      return console.error(error.message);
+      res.status(500).send({ message: "There was an error", error: error });
     }
     res.status(200).send({
+      id: result.insertId,
       message: "Collection Deleted",
     });
   });

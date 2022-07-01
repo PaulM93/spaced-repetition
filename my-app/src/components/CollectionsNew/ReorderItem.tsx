@@ -56,7 +56,7 @@ export default function ReorderItem({ item, position }: Props) {
               align="center"
             >
               <Flex flexDir={"column"}>
-                <TitleDisplay title={"Spanish"} cardCount={14} />
+                <TitleDisplay title={"Spanish"} cardsDue={14} />
               </Flex>
               <Icon
                 color="#ffffffb3"
