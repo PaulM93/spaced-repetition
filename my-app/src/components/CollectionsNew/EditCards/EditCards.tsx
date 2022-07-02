@@ -1,17 +1,23 @@
 import React, { useState } from "react";
 import Card from "./Card";
-import { Flex } from "@chakra-ui/react";
+import dayjs from "dayjs";
+import { filter, Flex } from "@chakra-ui/react";
 
 interface EditCardsProps {
+  collection: {};
   allCards: {}[];
   setAllCards: any;
+  generateID: () => void;
+  saveUpdatedCards: ({}) => void;
 }
 
-export default function EditCards({ allCards, setAllCards }: EditCardsProps) {
-  // export default function EditCards({ allCards, setAllCards }: EditCardsProps) {
-  //Handle Functions
-  console.log("allCards here", allCards);
-
+export default function EditCards({
+  allCards,
+  setAllCards,
+  generateID,
+  collection,
+  saveUpdatedCards,
+}: EditCardsProps) {
   //Edit Card
   const [editInProgess, setEditInProgess] = useState<{
     val: boolean;
@@ -37,62 +43,76 @@ export default function EditCards({ allCards, setAllCards }: EditCardsProps) {
         id: cardObj.id,
       });
     }
-    // const foundIndex: number = allCards.findIndex(
-    //   (card: { id: string }) => card.id === cardObj.id
-    // );
     const newState = allCards.map((card: { id: string }) => {
-      if ((card.id = cardObj.id)) {
-        return { ...card, val: newVal };
+      if (card.id === cardObj.id) {
+        return { ...card, [val]: newVal };
       }
+      return card;
     });
     setAllCards(newState);
-
-    //Update the card
-    // allCards[foundIndex][val] = newVal;
   };
 
-  //Save Edited Card
-  const saveEditedCard = (id) => {
-    console.log("SavedCards", allCards);
-    // const filteredCards = allCards.filter((card) => card.id !== id);
-    // const newCardsArr = [...filteredCards, editedCard];
-    // console.log("NewCards arr", newCardsArr);
-    /*
-      1) Filter out the old card
-      2) Create a new arr of other cards
-      3) Put the edited card into this array
-      4) Send to database
-    */
+  //Handle Save Cards
+  const handleSaveCards = () => {
+    saveUpdatedCards(allCards);
   };
 
   //Delete Card
-  // const deleteCard = (id) => {
-  //   //Works
-  //   console.log("allCards", allCards);
-  //   const filteredCards = allCards.filter((card) => card.id !== id);
-  //   setAllCards(filteredCards);
-  //   console.log("filteredCards", filteredCards);
-  // };
+  const deleteCard = (id: string) => {
+    //Works
+    console.log("allCards", allCards);
+    const filteredCards = allCards.filter(
+      (card: { id: string }) => card.id !== id
+    );
+    //Save to database
+    setAllCards(filteredCards);
+    saveUpdatedCards(filteredCards);
+  };
 
   //Reset Card
-  // const resetCard = (id) => {
-  //   //Make a new supermemo card with the same details
-  // };
+  const resetCard = (id: string) => {
+    // When user clicks a popover asks if they are sure
+    const resetDetails = {
+      interval: 0,
+      repetition: 0,
+      efactor: 2.5,
+      dueDate: dayjs(Date.now()).toISOString(),
+    };
+    const newState = allCards.map(
+      (card: { id: string; front: string; back: string }) => {
+        if (card.id === id) {
+          return {
+            id: card.id,
+            front: card.front,
+            back: card.back,
+            ...resetDetails,
+          };
+        }
+        return card;
+      }
+    );
+    setAllCards(newState);
+    saveUpdatedCards(newState);
+  };
 
   return (
     <Flex flexDir={"column"} w="100%">
       {allCards.length !== 0
         ? allCards.map((card: { id: string; back: string; front: string }) => (
             <Card
+              key={card.id}
               card={{
                 id: card.id,
                 back: card.back,
                 front: card.front,
               }}
+              resetCard={resetCard}
+              deleteCard={deleteCard}
               editInProgress={{
                 val: editInProgess.val,
                 id: editInProgess.id,
               }}
+              handleSaveCards={handleSaveCards}
               handleEditCard={handleEditCard}
             />
           ))

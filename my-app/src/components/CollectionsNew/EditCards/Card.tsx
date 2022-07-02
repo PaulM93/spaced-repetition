@@ -7,6 +7,13 @@ import {
   Flex,
   EditableInput,
   EditablePreview,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverBody,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  useDisclosure,
 } from "@chakra-ui/react";
 
 interface CardProps {
@@ -17,13 +24,21 @@ interface CardProps {
     cardObj: { id: string },
     val: string
   ) => void;
+  handleSaveCards: () => void;
+  deleteCard: (id: string) => void;
+  resetCard: (id: string) => void;
 }
+const isLoading = false;
 
 export default function Card({
   card,
   editInProgress,
   handleEditCard,
+  deleteCard,
+  resetCard,
+  handleSaveCards,
 }: CardProps) {
+  const { isOpen, onToggle, onClose } = useDisclosure();
   return (
     <Flex key={card.id} p={4} bg="#fafafa" mb={2} justify="space-between">
       <HStack spacing={2}>
@@ -50,21 +65,38 @@ export default function Card({
         <Button size="xs">Edit</Button>
         {editInProgress.val && editInProgress.id === card.id && (
           <>
-            <Button size="xs">
-              {/* <Button size="xs" onClick={() => saveEditedCard(card.id)}> */}
+            <Button size="xs" onClick={() => handleSaveCards()}>
               Save
             </Button>
           </>
         )}
 
-        <Button size="xs">
-          {/* <Button size="xs" onClick={() => deleteCard(card.id)}> */}
+        <Button size="xs" onClick={() => deleteCard(card.id)}>
           Delete
         </Button>
-        <Button size="xs">
-          {/* <Button size="xs" onClick={() => resetCard(card.id)}> */}
-          Reset
-        </Button>
+        <Popover isOpen={isOpen} onClose={onClose}>
+          <PopoverTrigger>
+            <Button onClick={onToggle} size="xs">
+              Reset
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent>
+            <PopoverArrow />
+            <PopoverCloseButton />
+            <PopoverBody>
+              <Text color="black">
+                Are you sure you want to reset this card. You cannot undo this.
+              </Text>
+              <Button
+                isLoading={isLoading}
+                onClick={() => resetCard(card.id)}
+                colorScheme={"red"}
+              >
+                Reset
+              </Button>
+            </PopoverBody>
+          </PopoverContent>
+        </Popover>
       </HStack>
     </Flex>
   );

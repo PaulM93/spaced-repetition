@@ -29,7 +29,6 @@ import { FiEdit2 } from "react-icons/fi";
 
 export default function AddEditCollection({ type, collection }) {
   //type == add -- edit
-  const navigate = useNavigate();
   const toast = useToast();
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
