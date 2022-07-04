@@ -8,6 +8,8 @@ const autheticateToken = (req, res, next) => {
   //We get the authroization header and set the token
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
+
+  // const token = authHeader && authHeader.split(" ")[1];
   //Check if token is null to deny access -- returns unauthorised
   if (token == null) return res.sendStatus(401);
 

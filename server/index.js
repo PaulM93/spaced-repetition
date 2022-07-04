@@ -11,7 +11,7 @@ const generateAccessToken = require("./middleware/generateToken");
 const PORT = process.env.PORT || 3001;
 
 //Auth
-const { signup, signin, refreshToken } = require("./handlers/auth");
+const { signup, signin, refreshToken, logout } = require("./handlers/auth");
 //User
 const { getUser, updateUser } = require("./handlers/users");
 //Collecions
@@ -26,6 +26,7 @@ const dbConfig = require("./config/db.config");
 //Auth Routes
 app.post("/signup", signup);
 app.post("/signin", signin);
+app.get("/logout", logout);
 app.post("/token", refreshToken);
 //User Routes
 app.get("/user", authenticateToken, getUser);
@@ -58,15 +59,6 @@ app.post("/user/collection/delete", authenticateToken, deleteCollection);
 - Back 
 
  */
-
-//We should store refresh tokens in the database
-
-//Delete refresh tokens upon logout -- this would be from a database
-app.delete("/logout", (req, res) => {
-  //Removing token
-  refreshTokens = refreshTokens.filter((token) => token !== req.body.token);
-  res.sendStatus(204); //token deleted
-});
 
 app.listen(PORT, () => {
   console.log("Running");

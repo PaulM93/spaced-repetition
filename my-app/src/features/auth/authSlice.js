@@ -52,8 +52,9 @@ export const signin = createAsyncThunk(
   }
 );
 
-export const logout = createAsyncThunk("auth/logout", async () => {
-  await authService.logout();
+//Logout
+export const signout = createAsyncThunk("auth/signout", async () => {
+  await authService.signout();
 });
 
 export const authSlice = createSlice({
@@ -90,7 +91,7 @@ export const authSlice = createSlice({
         state.user = null;
       })
       //Logout case -- if logout is completed we set user to null
-      .addCase(logout.fulfilled, (state) => {
+      .addCase(signout.fulfilled, (state) => {
         state.user = null;
       })
       .addCase(signin.pending, (state) => {

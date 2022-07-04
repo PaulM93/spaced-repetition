@@ -139,6 +139,12 @@ exports.signin = (req, res) => {
   }
 };
 
+exports.logout = (req, res) => {
+  //Remove the token
+  res.cookie("jwt", "", { maxAge: 1 });
+  res.redirect("/");
+};
+
 let refreshTokens = [];
 exports.refreshToken = (req, res) => {
   const refreshToken = req.body.token;

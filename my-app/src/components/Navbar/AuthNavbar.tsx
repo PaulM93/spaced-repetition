@@ -1,8 +1,7 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { logout, reset } from "../../features/auth/authSlice";
-import { Link, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
+import { signout, reset } from "../../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 //Components
 import NavButton from "./NavButton";
 import NavMenu from "./NavMenu";
@@ -19,7 +18,7 @@ export default function AuthNavbar() {
   const dispatch = useDispatch();
 
   const signUserOut = () => {
-    dispatch<any>(logout());
+    dispatch<any>(signout());
     dispatch(reset());
     navigate("/");
     toast({

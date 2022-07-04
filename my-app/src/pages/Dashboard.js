@@ -6,39 +6,30 @@ import {
   getCollections,
   editCollection,
   reset,
-  resetUpdate,
 } from "../features/collections/collectionsSlice";
 //Components
 import CollectionDisplay from "../components/CollectionsNew/CollectionDisplay";
 import StudyCards from "../components/StudyCards/StudyCards";
-import CollectionCard from "../components/CollectionsNew/CollectionCard/CollectionCard";
 import ReorderCollections from "../components/CollectionsNew/ReorderCollections";
-//ChakraUI
-import { Grid, Heading, Spinner, Flex, Box } from "@chakra-ui/react";
 
 export default function Collections(props) {
-  const {
-    collections,
-    isLoading,
-    isError,
-    isCreated,
-    isSuccess,
-    message,
-    isDeleted,
-    isUpdated,
-  } = useSelector((state) => state.collection);
+  const { collections, isLoading, isCreated, isDeleted, isUpdated } =
+    useSelector((state) => state.collection);
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   useEffect(() => {
-    //Reset everything
-    setStudyCollection({});
-    setCardsNotDue([]);
-    setStudyCards([]);
-    setReviewedCards([]);
-    alert("activated");
-    //Retrieve collections on page load
-    dispatch(getCollections());
-    dispatch(reset());
-  }, [collections === null, isUpdated, isCreated, isDeleted]);
+    if (user) {
+      alert("activated");
+      //Reset everything
+      setStudyCollection({});
+      setCardsNotDue([]);
+      setStudyCards([]);
+      setReviewedCards([]);
+      //Retrieve collections on page load
+      dispatch(getCollections());
+      dispatch(reset());
+    }
+  }, [collections === null, isUpdated, isCreated, isDeleted, user]);
   //Maybe just run this function adfter upate
 
   //We set study mode to true and the collection
