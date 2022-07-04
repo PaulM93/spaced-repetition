@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { signout, reset } from "../../features/auth/authSlice";
@@ -17,7 +16,6 @@ export default function AuthWrapper({ children }) {
     - Check token expirey time 
     - If expired we fire the logout function
     - Token is stored in the user object in state
-  
   */
 
   //Check for user
@@ -25,8 +23,6 @@ export default function AuthWrapper({ children }) {
     //Autologout -- works on page refresh
     if (user) {
       const decodedToken: { exp: number } = jwtDecode(user.accessToken);
-      console.log("Token", decodedToken);
-      console.log("DecodedTokane", decodedToken);
       //Set a timer for auto logout
       setTimeout(() => {
         dispatch<any>(signout());

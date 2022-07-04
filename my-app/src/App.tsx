@@ -30,8 +30,14 @@ function App() {
           />
           <Route path="/signup" element={<Auth page={"signup"} />} />
           <Route path="/signin" element={<Auth page={"signin"} />} />
-          <Route path="/profile" element={<Profile />} />
-          {/* <Route path="/addCollection" element={<AddCollection />} /> */}
+          <Route
+            path="/profile"
+            element={
+              <AuthWrapper>
+                <Profile />
+              </AuthWrapper>
+            }
+          />
         </Routes>
       </Layout>
     </>
