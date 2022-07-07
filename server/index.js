@@ -6,12 +6,18 @@ app.use(cors());
 app.use(express.json());
 //Middlewear
 const authenticateToken = require("./middleware/authenticateToken");
-const generateAccessToken = require("./middleware/generateToken");
 //Port
 const PORT = process.env.PORT || 3001;
 
 //Auth
-const { signup, signin, refreshToken, logout } = require("./handlers/auth");
+const {
+  signup,
+  signin,
+  refreshToken,
+  logout,
+  changePassword,
+  changeEmail,
+} = require("./handlers/auth");
 //User
 const { getUser, updateUser } = require("./handlers/users");
 //Collecions
@@ -21,13 +27,14 @@ const {
   updateCollection,
   deleteCollection,
 } = require("./handlers/collections");
-const dbConfig = require("./config/db.config");
 
 //Auth Routes
 app.post("/signup", signup);
 app.post("/signin", signin);
 app.get("/logout", logout);
 app.post("/token", refreshToken);
+app.post("/changePassword", authenticateToken, changePassword);
+app.post("/changeEmail", authenticateToken, changeEmail);
 //User Routes
 app.get("/user", authenticateToken, getUser);
 app.post("/user", authenticateToken, updateUser);

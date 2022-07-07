@@ -1,26 +1,21 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { signout, reset } from "../../features/auth/authSlice";
-import { useNavigate } from "react-router-dom";
+import { signout, resetAuth } from "../../features/auth/authSlice";
 //Components
 import NavButton from "./NavButton";
 import NavMenu from "./NavMenu";
 import Logo from "./Logo";
 import Feedback from "./Feedback";
-import CustomTooltip from "../Util/CustomTooltip";
 import AddCollection from "../CollectionsNew/AddEditCollection";
 ////////
-import { Flex, HStack, Icon, IconButton, useToast } from "@chakra-ui/react";
-import { DragHandleIcon } from "@chakra-ui/icons";
+import { Flex, HStack, useToast } from "@chakra-ui/react";
 export default function AuthNavbar() {
   const toast = useToast();
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const signUserOut = () => {
     dispatch<any>(signout());
-    dispatch(reset());
-    navigate("/");
+    dispatch(resetAuth());
     toast({
       title: "Signed out",
       status: "success",

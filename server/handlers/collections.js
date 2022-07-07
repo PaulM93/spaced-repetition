@@ -24,90 +24,107 @@ const db = dbConfig.connection;
 //Get Collections
 exports.getCollections = (req, res) => {
   //CollectionID === req.user.userID
-  db.query(
-    "SELECT * FROM collections WHERE collectionID =?",
-    [req.user.userID],
-    (error, result) => {
-      if (error) {
-        res.status(500).send({ error: error });
-      } else {
-        if (result.length === 0) {
-          return res.status(200).send([]);
+  try {
+    db.query(
+      "SELECT * FROM collections WHERE collectionID =?",
+      [req.user.userID],
+      (error, result) => {
+        if (error) {
+          res.status(500).send({ error: error });
         } else {
-          console.log(result);
-          res.status(200).send(result);
+          if (result.length === 0) {
+            return res.status(200).send([]);
+          } else {
+            console.log(result);
+            res.status(200).send(result);
+          }
         }
       }
-    }
-  );
+    );
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ message: err });
+  }
 };
 
 //Create Collectiion
 exports.createCollection = (req, res) => {
   //We want to create a collection here
-  const query = "INSERT INTO collections SET?";
-  const insert = {
-    collectionID: req.user.userID, //use the userID
-    title: req.body.title,
-    description: req.body.description,
-    category: req.body.category,
-    nextStudyDate: "",
-    cards: JSON.stringify([]),
-  };
-  //Where the user ID === the userID
-  db.query(query, insert, function (err, result) {
-    if (err) {
-      res.send({ err: err });
-    }
-    if (result) {
-      console.log(result);
-      res.status(200).send({
-        collection: {
-          ...insert,
-          id: result.insertId,
-        },
-        message: "Collection Created",
-      });
-    }
-  });
+  try {
+    const query = "INSERT INTO collections SET?";
+    const insert = {
+      collectionID: req.user.userID, //use the userID
+      title: req.body.title,
+      description: req.body.description,
+      category: req.body.category,
+      nextStudyDate: "",
+      cards: JSON.stringify([]),
+    };
+    //Where the user ID === the userID
+    db.query(query, insert, function (err, result) {
+      if (err) {
+        res.status(500).send({ message: err });
+      }
+      if (result) {
+        console.log(result);
+        res.status(200).send({
+          collection: {
+            ...insert,
+            id: result.insertId,
+          },
+          message: "Collection Created",
+        });
+      }
+    });
+  } catch (err) {
+    res.status(500).send({ message: err });
+  }
 };
 
 //Update Collection
 exports.updateCollection = (req, res) => {
-  const id = req.body.id;
-  const title = req.body.title;
-  const description = req.body.description;
-  const category = req.body.category;
-  const nextStudyDate = req.body.nextStudyDate;
-  console.log("NextStudyDate gerer", nextStudyDate);
-  const cards = JSON.stringify(req.body.cards); //stringify array
-  let query =
-    "UPDATE collections SET title = ?, description = ?, category = ?, cards = ?, nextStudyDate = ? WHERE id = ?";
-  let data = [title, description, category, cards, nextStudyDate, id];
-  db.query(query, data, (error, results, fields) => {
-    if (error) {
-      console.log(error);
-      res.status(500).send({ message: "There was an error", error: error });
-    }
-    console.log(results);
-    res.status(200).send({
-      message: "Collection Updated",
+  try {
+    const id = req.body.id;
+    const title = req.body.title;
+    const description = req.body.description;
+    const category = req.body.category;
+    const nextStudyDate = req.body.nextStudyDate;
+    console.log("NextStudyDate gerer", nextStudyDate);
+    const cards = JSON.stringify(req.body.cards); //stringify array
+    let query =
+      "UPDATE collections SET title = ?, description = ?, category = ?, cards = ?, nextStudyDate = ? WHERE id = ?";
+    let data = [title, description, category, cards, nextStudyDate, id];
+    db.query(query, data, (error, results, fields) => {
+      if (error) {
+        console.log(error);
+        res.status(500).send({ message: "There was an error", error: error });
+      }
+      console.log(results);
+      res.status(200).send({
+        message: "Collection Updated",
+      });
     });
-  });
+  } catch (err) {
+    res.status(500).send({ message: err });
+  }
 };
 
 //Delete Collection
 exports.deleteCollection = (req, res) => {
-  const query = "DELETE FROM collections WHERE id =?";
-  console.log("body", req.body);
-  let data = [req.body.id];
-  db.query(query, data, function (error, result) {
-    if (error) {
-      res.status(500).send({ message: "There was an error", error: error });
-    }
-    res.status(200).send({
-      id: result.insertId,
-      message: "Collection Deleted",
+  try {
+    const query = "DELETE FROM collections WHERE id =?";
+    console.log("body", req.body);
+    let data = [req.body.id];
+    db.query(query, data, function (error, result) {
+      if (error) {
+        res.status(500).send({ message: "There was an error", error: error });
+      }
+      res.status(200).send({
+        id: result.insertId,
+        message: "Collection Deleted",
+      });
     });
-  });
+  } catch (err) {
+    res.status(500).send({ message: err });
+  }
 };

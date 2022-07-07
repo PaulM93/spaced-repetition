@@ -1,163 +1,177 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { useSelector } from "react-redux";
-import { motion } from "framer-motion";
-import {
-  Box,
-  Flex,
-  Button,
-  Heading,
-  VStack,
-  Text,
-  Input,
-  Textarea,
-} from "@chakra-ui/react";
+import { useDispatch, useSelector } from "react-redux";
+import { signout, resetAuth } from "../features/auth/authSlice";
+import { changeEmail, changePassword } from "../features/user/userSlice";
+import { Grid, GridItem, useToast } from "@chakra-ui/react";
+//Components
+import Settings from "../components/Profile/Settings";
+import General from "../components/Profile/General";
+import ControlButtons from "../components/Profile/ControlButtons";
 
-export default function Profile(props) {
-  const navigate = useNavigate();
+export default function Profile() {
+  const toast = useToast();
+  const dispatch = useDispatch();
   const { user } = useSelector(
     //Auth state is selected from store
     (state: any) => state.auth
   );
-
-  //Populate with data
-  const [selectedPage, setSelectedPage] = useState("General");
-  const [userDetails, setUserDetails] = useState({
-    username: "",
-    bio: "",
-  });
-
-  useEffect(() => {
-    !user
-      ? navigate("/")
-      : setUserDetails({
-          ...userDetails,
-          username: user.username,
-          bio: user.bio,
-        });
-  }, [user, props]);
-
-  const buttonArr = ["General", "Settings", "Logout"];
-  const buttonMarkup = (
-    <VStack minWidth={"100%"}>
-      {buttonArr.map((button) => (
-        <motion.button
-          onClick={() => setSelectedPage(button)}
-          style={{
-            minWidth: "100%",
-            padding: "10px",
-            border:
-              selectedPage === button ? "1px solid #fff" : "1px solid #262626",
-            fontSize: "12px",
-            borderRadius: "7px",
-            color: "#ffffffb3",
-            display: "flex",
-            justifyContent: "flex-start",
-            alignItems: "center",
-          }}
-          //Put cool subtle animation of gray background which moves
-        >
-          {button}
-        </motion.button>
-      ))}
-    </VStack>
+  const { userLoading, isSuccessUser } = useSelector(
+    (state: any) => state.user
   );
 
-  //Handle front and back text change
-  const handleChange = (e) => {
-    setUserDetails({
-      ...userDetails,
-      [e.target.id]: e.target.value,
+  //Sign userOut
+  const signUserOut = () => {
+    dispatch<any>(signout());
+    dispatch(resetAuth());
+    toast({
+      title: "Signed out",
+      status: "success",
+      position: "bottom-left",
+      isClosable: true,
     });
   };
 
-  const handleSubmit = () => {
-    axios
-      .post("/user", userDetails)
-      .then((res) => {
-        alert("updated");
-      })
-      .catch((err) => {
-        console.log("error", err);
+  //Populate with data
+  const [selectedPage, setSelectedPage] = useState("General");
+  //UserDetails
+  const [userDetails, setUserDetails] = useState<{
+    username: string;
+    bio: string;
+  }>({
+    username: "",
+    bio: "",
+  });
+  //Email Details
+  const [emailDetails, setEmailDetails] = useState<{
+    currentEmail: string;
+    newEmail: string;
+  }>({
+    currentEmail: "",
+    newEmail: "",
+  });
+  //Password Details
+  const [passwordDetails, setPasswordDetails] = useState<{
+    currentPassword: string;
+    newPassword: string;
+  }>({
+    currentPassword: "",
+    newPassword: "",
+  });
+
+  useEffect(() => {
+    if (user) {
+      setUserDetails({
+        ...userDetails,
+        username: user.username,
+        bio: user.bio,
       });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isSuccessUser.val) {
+      if (isSuccessUser.type === "email") {
+        const emailReset = {
+          currentEmail: "",
+          newEmail: "",
+        };
+        setEmailDetails(emailReset);
+      }
+      if (isSuccessUser.type === "password") {
+        const passwordReset = {
+          currentPassword: "",
+          newPassword: "",
+        };
+        setPasswordDetails(passwordReset);
+      }
+    }
+  }, [isSuccessUser]);
+
+  //Handle front and back text change
+  const handleChange = (e: React.FormEvent<HTMLInputElement>, type: string) => {
+    if (type === "userDetails") {
+      setUserDetails({
+        ...userDetails,
+        [e.currentTarget.id]: e.currentTarget.value,
+      });
+    }
+    if (type === "passwordDetails") {
+      setPasswordDetails({
+        ...passwordDetails,
+        [e.currentTarget.id]: e.currentTarget.value,
+      });
+    }
+    if (type === "emailDetails") {
+      setEmailDetails({
+        ...emailDetails,
+        [e.currentTarget.id]: e.currentTarget.value,
+      });
+    }
   };
 
-  return (
-    <Flex width={"100%"} mt={5}>
-      <Flex mr={2} width="30%">
-        {buttonMarkup}
-      </Flex>
-      <Flex
-        width="70%"
-        border="1px solid #262626"
-        boxShadow="rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px"
-        borderRadius={"5px"}
-        color="#fafafa"
-        p={10}
-        justify={"center"}
-        borderBottom="1px solid #262626"
-      >
-        <Flex
-          flexDir={"column"}
-          align="flex-start"
-          width={"100%"}
-          justify="flex-start"
-        >
-          <Box mb={5}>
-            <Heading size="sm">Your Details</Heading>
-            <Text fontSize={"sm"} color="#ffffffb3">
-              Update your details within Spaced
-            </Text>
-          </Box>
+  const handleSubmit = (type: string) => {
+    if (type === "emailDetails") {
+      dispatch<any>(changeEmail(emailDetails));
+    }
+    if (type === "passwordDetails") {
+      alert("here");
+      dispatch<any>(changePassword(passwordDetails));
+    }
+  };
 
-          <Box mb={2}>
-            <Text fontSize={"xs"} mb="8px">
-              UserName:
-            </Text>
-            <Input
-              value={userDetails.username}
-              onChange={handleChange}
-              minWidth={"250px"}
-              id="username"
-              placeholder="Enter your username..."
-              size="md"
-              color="#ffffff"
-              fontSize={"sm"}
-              borderColor={"#262626"}
-              focusBorderColor="purple.400"
-              errorBorderColor="red.300"
-            />
-          </Box>
-          <Flex w="100%" justify="space-between" align={"flex-end"}>
-            <Box>
-              <Text fontSize={"xs"} mb="8px">
-                Bio
-              </Text>
-              <Textarea
-                minWidth={"250px"}
-                value={userDetails.bio}
-                variant="outline"
-                fontSize={"sm"}
-                borderColor={"#262626"}
-                focusBorderColor="purple.400"
-                placeholder="Tell us a bit about you..."
-                id="body"
-                errorBorderColor="red.300"
-                onChange={handleChange}
-              />
-            </Box>
-            <Button
-              onClick={() => handleSubmit()}
-              size="sm"
-              variant="outline"
-              colorScheme={"pink"}
-            >
-              Save
-            </Button>
-          </Flex>
-        </Flex>
-      </Flex>
-    </Flex>
+  console.log("Email Details", emailDetails);
+  console.log("Password Details", passwordDetails);
+
+  //Markup
+  let markup: any;
+  switch (selectedPage) {
+    case "General":
+      markup = (
+        <General
+          userLoading={userLoading}
+          title={"Your Details"}
+          subtitle={"Update your details within Spaced"}
+          userDetails={userDetails}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+        />
+      );
+      break;
+    case "Settings":
+      markup = (
+        <Settings
+          userLoading={userLoading}
+          emailDetails={emailDetails}
+          passwordDetails={passwordDetails}
+          handleChange={handleChange}
+          handleSubmit={handleSubmit}
+          title={"Your Settings"}
+          subtitle={"Update your settings within Spaced"}
+        />
+      );
+      break;
+    default:
+  }
+
+  return (
+    <Grid
+      templateColumns={[
+        "repeat(1, 1fr)",
+        "repeat(1, 1fr)",
+        "repeat(3, 1fr)",
+        "repeat(3, 1fr)",
+      ]}
+      gap={6}
+      minWidth="100%"
+    >
+      <GridItem colSpan={1}>
+        <ControlButtons
+          signUserOut={signUserOut}
+          setSelectedPage={setSelectedPage}
+          selectedPage={selectedPage}
+        />
+      </GridItem>
+      <GridItem colSpan={2}>{markup}</GridItem>
+    </Grid>
   );
 }

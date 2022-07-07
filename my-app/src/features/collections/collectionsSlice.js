@@ -1,26 +1,17 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import collectionService from "./collectionService";
-import dayjs from "dayjs";
+import { handleErrorMessage } from "../utilFunctions";
 
 const initialState = {
   collections: [],
-  isError: false,
+  isErrorCollection: false,
   isSuccess: false,
   isLoading: false,
-  message: "",
+  collectionMessage: "",
   //Create
   isCreated: false,
   isUpdated: false,
   isDeleted: false,
-};
-
-//Format Error
-const errorMessage = (error) => {
-  return (
-    (error.response && error.response.data && error.response.data.message) ||
-    error.message ||
-    error.toString()
-  );
 };
 
 //Get Collections
@@ -36,7 +27,7 @@ export const getCollections = createAsyncThunk(
       console.log(data);
       return data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(errorMessage(error));
+      return thunkAPI.rejectWithValue(handleErrorMessage(error));
     }
   }
 );
@@ -53,7 +44,7 @@ export const createCollection = createAsyncThunk(
         accessToken
       );
     } catch (error) {
-      return thunkAPI.rejectWithValue(errorMessage(error));
+      return thunkAPI.rejectWithValue(handleErrorMessage(error));
     }
   }
 );
@@ -70,7 +61,7 @@ export const editCollection = createAsyncThunk(
         accessToken
       );
     } catch (error) {
-      return thunkAPI.rejectWithValue(errorMessage(error));
+      return thunkAPI.rejectWithValue(handleErrorMessage(error));
     }
   }
 );
@@ -86,7 +77,7 @@ export const deleteCollection = createAsyncThunk(
         accessToken
       );
     } catch (error) {
-      return thunkAPI.rejectWithValue(errorMessage(error));
+      return thunkAPI.rejectWithValue(handleErrorMessage(error));
     }
   }
 );
@@ -98,23 +89,17 @@ export const collectionSlice = createSlice({
     reset: (state) => {
       state.isSuccess = false;
       state.isLoading = false;
-      state.message = false;
+      state.collectionMessage = "";
       state.isUpdated = false;
     },
     resetUpdate: (state) => {
       state.isSuccess = true;
       state.isLoading = false;
-      state.message = false;
+      state.collectionMessage = "";
       state.isUpdated = false;
       state.isCreated = false;
       state.isDeleted = false;
     },
-    // reset: (state) => {
-    //   state.isLoading = false;
-    //   state.isError = false;
-    //   state.isSuccess = false;
-    //   state.message = "";
-    // },
   },
   extraReducers: (builder) => {
     builder
@@ -123,15 +108,13 @@ export const collectionSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(getCollections.fulfilled, (state, action) => {
-        // console.log("action", action.payload);
         state.isLoading = false;
-        // state.isSuccess = true;
         state.collections = action.payload;
       })
       .addCase(getCollections.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
-        state.message = action.payload;
+        state.collectionMessage = action.payload;
       })
       //Create
       .addCase(createCollection.pending, (state) => {
@@ -142,6 +125,7 @@ export const collectionSlice = createSlice({
         state.isLoading = false;
         state.isCreated = true;
         state.isSuccess = true;
+        state.collectionMessage = action.payload.message;
         //Send the new collection back so we can push into state
         state.collections.push(action.payload.collection);
       })
@@ -149,7 +133,7 @@ export const collectionSlice = createSlice({
         state.isLoading = false;
         state.isCreated = false;
         state.isError = action.payload;
-        state.message = action.payload;
+        state.collectionMessage = action.payload.message;
       })
       //Edit
       .addCase(editCollection.pending, (state) => {
@@ -159,12 +143,13 @@ export const collectionSlice = createSlice({
         state.isLoading = false;
         state.isUpdated = true;
         state.isSuccess = true;
+        state.collectionMessage = action.payload.message;
       })
       .addCase(editCollection.rejected, (state, action) => {
         state.isLoading = false;
         state.isCreated = false;
         state.isError = action.payload;
-        state.message = action.payload;
+        state.collectionMessage = action.payload.message;
       })
       //Delete
       .addCase(deleteCollection.pending, (state) => {
@@ -174,6 +159,7 @@ export const collectionSlice = createSlice({
         state.isLoading = false;
         state.isDeleted = true;
         state.isSuccess = true;
+        state.collectionMessage = action.payload.message;
         //Filter from collection
         state.collections.filter((val) => val !== action.payload.id);
       })
@@ -181,12 +167,10 @@ export const collectionSlice = createSlice({
         state.isLoading = false;
         state.isDeleted = false;
         state.isError = action.payload;
-        state.message = action.payload;
+        state.collectionMessage = action.payload.message;
       });
   },
 });
-
-// console.log("Collectionslice", collectionSlice);
 
 export const { reset, resetUpdate } = collectionSlice.actions;
 export default collectionSlice.reducer;

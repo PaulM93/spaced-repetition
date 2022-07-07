@@ -6,10 +6,10 @@ const user = JSON.parse(localStorage.getItem("user"));
 
 const initialState = {
   user: user ? user : null, //aif user in local storage we set it
-  isError: false,
-  isSuccess: false,
-  isLoading: false,
-  message: "",
+  isAuthError: false,
+  isSuccessAuth: false,
+  isLoadingAuth: false,
+  authMessage: "",
 };
 
 // Signup user
@@ -61,11 +61,11 @@ export const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    reset: (state) => {
-      state.isLoading = false;
-      state.isError = false;
-      state.isSuccess = false;
-      state.message = "";
+    resetAuth: (state) => {
+      state.isLoadingAuth = false;
+      state.isAuthError = false;
+      state.isSuccessAuth = false;
+      state.authMessage = "";
     }, // reset the state to default values
   },
   extraReducers: (builder) => {
@@ -73,21 +73,21 @@ export const authSlice = createSlice({
       //Signup case
       .addCase(signup.pending, (state) => {
         //When signup is fired and is pending we can set loading
-        state.isLoading = true;
+        state.isLoadingAuth = true;
       })
       .addCase(signup.fulfilled, (state, action) => {
         //When fulfilled we set loading to false
         //We also want to set the userdata and token
-        state.isLoading = false;
-        state.isSuccess = true;
+        state.isLoadingAuth = false;
+        state.isSuccessAuth = true;
         state.user = action.payload; //returned data from signup function
       })
       //we get data returned from signup function in action.payload
       .addCase(signup.rejected, (state, action) => {
         //if error we set here
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
+        state.isLoadingAuth = false;
+        state.isAuthError = true;
+        state.authMessage = action.payload;
         state.user = null;
       })
       //Logout case -- if logout is completed we set user to null
@@ -96,26 +96,28 @@ export const authSlice = createSlice({
       })
       .addCase(signin.pending, (state) => {
         //When signin is fired and is pending we can set loading
-        state.isLoading = true;
+        state.isLoadingAuth = true;
       })
       .addCase(signin.fulfilled, (state, action) => {
+        console.log("sign in action", action);
         //When fulfilled we set loading to false
         //We also want to set the userdata and token
-        state.isLoading = false;
-        state.isSuccess = true;
-        state.user = action.payload; //returned data from signin function
+        state.isLoadingAuth = false;
+        state.authMessage = action.payload.message;
+        state.isSuccessAuth = true;
+        state.user = action.payload.user; //returned data from signin function
       })
       //we get data returned from signin function in action.payload
       .addCase(signin.rejected, (state, action) => {
         //if error we set here
-        state.isLoading = false;
-        state.isError = true;
-        state.message = action.payload;
+        state.isLoadingAuth = false;
+        state.isAuthError = true;
+        state.authMessage = action.payload;
         state.user = null;
       });
   },
 });
 
 //export so we can use in auth.tsx
-export const { reset } = authSlice.actions;
+export const { resetAuth } = authSlice.actions;
 export default authSlice.reducer;

@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 //Functions to dispatch
-import { signup, signin, reset } from "../features/auth/authSlice";
+import { signup, signin } from "../features/auth/authSlice";
 import {
   Input,
   VStack,
   InputRightElement,
   FormControl,
   FormErrorMessage,
-  useToast,
   InputGroup,
   IconButton,
 } from "@chakra-ui/react";
@@ -20,40 +18,12 @@ import AuthLayout from "../components/Layouts/AuthLayout";
 import HelperText from "../components/Auth/HelperText";
 
 export default function AuthPage({ page }) {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
+  const { isLoadingAuth } = useSelector(
     //Auth state is selected from store
     (state) => state.auth
   );
-  useEffect(() => {
-    //Check if their is an error
-    if (isError) {
-      return toast({
-        title: message,
-        status: "error",
-        position: "bottom-left",
-        isClosable: true,
-      });
-    }
-    //If signup is fulfilled isSuccess === true || user
-    if (isSuccess && user) {
-      // if (isSuccess || user) {
-      console.log(isSuccess);
-      console.log(user);
-      //We navigate to the dashboard
-      navigate("/dashboard");
-      clearFields();
-      const toastMessage =
-        page === "signin" ? "Successfully signed in" : "Successfully signed up";
-      toasty(toastMessage, "success");
-      //We then dispatch the reset reducer in authSlice to reset loading, errors etc
-      dispatch(reset());
-    }
-  }, [user, isError, isSuccess, message, navigate, dispatch]);
-  //On dahboard user userID to access collections etc
 
-  const toast = useToast();
   const [show, setShow] = useState(false);
   const handleShow = () => setShow(!show);
   // const [loading, setLoading] = useState(false);
@@ -102,19 +72,11 @@ export default function AuthPage({ page }) {
     setUserDetails(resetObj);
   };
 
-  const toasty = (message, type) => {
-    return toast({
-      title: message,
-      status: type,
-      position: "bottom-left",
-      isClosable: true,
-    });
-  };
-
   //Check if card already exists
   const handleSubmit = (e) => {
     e.preventDefault();
     if (handleValidation()) {
+      clearFields();
       page === "signin"
         ? dispatch(signin(userDetails))
         : dispatch(signup(userDetails));
@@ -201,7 +163,7 @@ export default function AuthPage({ page }) {
             )}
           </FormControl>
           <AuthButton
-            loading={isLoading}
+            loading={isLoadingAuth}
             buttonText={buttonText}
             ariaLabel={ariaLabel}
             handleSubmit={handleSubmit}

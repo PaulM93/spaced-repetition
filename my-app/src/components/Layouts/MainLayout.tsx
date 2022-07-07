@@ -1,59 +1,108 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { resetUpdate } from "../../features/collections/collectionsSlice";
+import { resetAuth } from "../../features/auth/authSlice";
+import { resetUser } from "../../features/user/userSlice";
+import { useNavigate } from "react-router-dom";
 //Components
 import Navbar from "../Navbar/Index";
 import { Flex, useToast } from "@chakra-ui/react";
 
 export default function Layout({ children }) {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const toast = useToast();
   //Display toasts here
   const {
     isUpdated,
+    collectionMessage,
     isCreated,
-    isLoading,
-    isError,
     isSuccess,
-    message,
     isDeleted,
+    isErrorCollection,
   } = useSelector((state: any) => state.collection);
+  const { isAuthError, isSuccessAuth, authMessage } = useSelector(
+    (state: any) => state.auth
+  );
+  const { isSuccessUser, userMessage, isErrorUser } = useSelector(
+    (state: any) => state.user
+  );
 
+  //User
   useEffect(() => {
-    if (isUpdated) {
+    const customToast = (
+      message: string,
+      type: "info" | "warning" | "success" | "error" | "loading"
+    ) => {
       toast({
-        title: "Collection Updated",
-        status: "success",
+        title: message,
+        status: type,
         position: "bottom-left",
         isClosable: true,
       });
-      dispatch(resetUpdate());
+      dispatch(resetUser());
+    };
+    if (isSuccessUser.val && userMessage !== "") {
+      customToast(userMessage, "success");
     }
-    if (isCreated) {
-      toast({
-        //Get the message
-        title: "Collection created",
-        // title: message,
-        status: "success",
-        position: "bottom-left",
-        isClosable: true,
-      });
-      dispatch(resetUpdate());
+    if (isErrorUser && userMessage !== "") {
+      customToast(userMessage, "error");
     }
-    if (isDeleted) {
-      toast({
-        //Get the message
-        title: "Collection Deleted",
-        // title: message,
-        status: "success",
-        position: "bottom-left",
-        isClosable: true,
-      });
-      dispatch(resetUpdate());
-    }
+  }, [isSuccessUser, userMessage, isErrorUser, dispatch, toast]);
 
-    //Error also
-  }, [isSuccess]);
+  //Auth
+  useEffect(() => {
+    const customToast = (
+      message: string,
+      type: "info" | "warning" | "success" | "error" | "loading"
+    ) => {
+      toast({
+        title: message,
+        status: type,
+        position: "bottom-left",
+        isClosable: true,
+      });
+      dispatch(resetAuth());
+    };
+    if (isSuccessAuth && authMessage !== "") {
+      navigate("/dashboard");
+      customToast(authMessage, "success");
+    }
+    if (isAuthError && authMessage !== "") {
+      customToast(authMessage, "error");
+    }
+  }, [toast, isSuccessAuth, authMessage, isAuthError, dispatch, navigate]);
+
+  //Fix messages -- i.e. errors etc
+  useEffect(() => {
+    const customToast = (
+      message: string,
+      type: "info" | "warning" | "success" | "error" | "loading"
+    ) => {
+      toast({
+        title: message,
+        status: type,
+        position: "bottom-left",
+        isClosable: true,
+      });
+      dispatch(resetUpdate());
+    };
+    if (isUpdated || isCreated || isDeleted) {
+      customToast(collectionMessage, "success");
+    }
+    if (isErrorCollection && collectionMessage !== "") {
+      customToast(collectionMessage, "error");
+    }
+  }, [
+    isSuccess,
+    dispatch,
+    isCreated,
+    isDeleted,
+    isUpdated,
+    toast,
+    isErrorCollection,
+    collectionMessage,
+  ]);
 
   return (
     <Flex

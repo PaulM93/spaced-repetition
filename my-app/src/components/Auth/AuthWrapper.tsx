@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { signout, reset } from "../../features/auth/authSlice";
+import { signout, resetAuth } from "../../features/auth/authSlice";
 import jwtDecode from "jwt-decode";
 import { useToast } from "@chakra-ui/react";
 
@@ -26,7 +26,7 @@ export default function AuthWrapper({ children }) {
       //Set a timer for auto logout
       setTimeout(() => {
         dispatch<any>(signout());
-        dispatch(reset());
+        dispatch(resetAuth());
         toast({
           title: "Signed out",
           status: "success",

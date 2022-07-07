@@ -19,7 +19,7 @@ export default function Collections(props) {
   const dispatch = useDispatch();
   useEffect(() => {
     if (user) {
-      alert("activated");
+      // alert("activated");
       //Reset everything
       setStudyCollection({});
       setCardsNotDue([]);
