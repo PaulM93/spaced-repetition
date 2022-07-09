@@ -8,21 +8,13 @@ import EditCards from "../EditCards/EditCards";
 import Footer from "./Footer";
 import {
   Modal,
-  Flex,
   useDisclosure,
   Icon,
   IconButton,
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
-  Input,
-  FormControl,
-  FormLabel,
-  Button,
-  Box,
-  FormErrorMessage,
   ModalCloseButton,
 } from "@chakra-ui/react";
 import CustomTooltip from "../../Util/CustomTooltip";
@@ -95,8 +87,6 @@ export default function Index({
     }
   }, [openVal, cards, isOpen]);
 
-  console.log("All Cards", allCards);
-
   //Card exists
   const [cardExists, setCardExists] = useState<{ val: boolean; id: string }>({
     val: null,
@@ -157,7 +147,7 @@ export default function Index({
         isOpen={isOpen}
         onClose={() => handleClose()}
       >
-        <ModalOverlay />
+        <ModalOverlay bg="blackAlpha.700" />
         <ModalContent
           color="white"
           bg="#141414"

@@ -1,11 +1,6 @@
 import axios from "axios";
 
 //No route url needed because of proxy in package.json
-const generateConfig = (accessToken) => {
-  return {
-    headers: { Authorization: `Bearer ${accessToken}` },
-  };
-};
 
 //Signup user
 const signup = async (userData) => {
@@ -15,7 +10,7 @@ const signup = async (userData) => {
   //We set the access token in local storage to use for requests
   if (response.data) {
     //set token and userdata in local storage
-    localStorage.setItem("user", JSON.stringify(response.data));
+    localStorage.setItem("user", JSON.stringify(response.data.user));
   }
   //return data so we can set
   return response.data;

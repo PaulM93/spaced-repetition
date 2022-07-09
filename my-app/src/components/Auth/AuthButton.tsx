@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTheme } from "../ThemeContext";
 import { motion } from "framer-motion";
 import { Box } from "@chakra-ui/react";
 
@@ -15,21 +16,15 @@ export default function AuthButton({
   buttonText,
   loading,
 }: AuthButtonProps) {
+  const { theme } = useTheme();
   const [whileHover, setWhileHover] = useState<boolean>(false);
+
+  console.log("Themsde", theme);
 
   return (
     <Box position={"relative"} width="100%" onClick={(e) => handleSubmit(e)}>
       <motion.button
-        style={{
-          borderRadius: "7px",
-          padding: "10px 20px 10px 20px",
-          color: "white",
-          width: "100%",
-          fontSize: "16px",
-          background: "#7928CA",
-          border: "1px solid #7928CA",
-          position: "absolute",
-        }}
+        style={theme.buttons.authButton.initial}
         initial={{ opacity: 1 }}
         animate={{
           opacity: whileHover ? 0 : 1,
@@ -42,14 +37,7 @@ export default function AuthButton({
       <motion.button
         onHoverStart={() => setWhileHover(true)}
         onHoverEnd={() => setWhileHover(false)}
-        style={{
-          borderRadius: "7px",
-          width: "100%",
-          padding: "10px 20px 10px 20px",
-          color: "#ffffffb3",
-          fontSize: "16px",
-          border: "1px solid #ffffffb3",
-        }}
+        style={theme.buttons.authButton.hover}
         aria-label={ariaLabel}
         initial={{ opacity: 0 }}
         animate={{

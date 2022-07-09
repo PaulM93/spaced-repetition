@@ -1,11 +1,7 @@
 import React from "react";
-import {
-  BrowserRouter,
-  BrowserRouter as Router,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 //Components
+import { ThemeProvider } from "./components/ThemeContext";
 import AuthWrapper from "./components/Auth/AuthWrapper";
 import Layout from "./components/Layouts/MainLayout";
 import LandingPage from "./pages/LandingPage";
@@ -40,6 +36,7 @@ function App() {
           />
         </Routes>
       </Layout>
+      {/* </ThemeProvider> */}
     </>
   );
 }

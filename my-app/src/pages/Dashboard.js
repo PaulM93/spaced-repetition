@@ -112,8 +112,6 @@ export default function Collections(props) {
     const sortedByDueDate = newCards.sort((a, b) =>
       a.dueDate.localeCompare(b.dueDate)
     );
-    alert("sorted");
-    console.log("Sorted", sortedByDueDate);
 
     //Field --- nextStudyDate ---
     //Set as first item in sortedByDueDate
@@ -135,10 +133,6 @@ export default function Collections(props) {
     //Reset
     setStudyMode(false);
   };
-  console.log("Study cards", studyCards);
-  console.log("Cards not due", cardsNotDue);
-  console.log("Reviewed cards", reviewedCards);
-  console.log("Study Collection", studyCollection);
 
   //When we submit we set the reviewedCards as the cards
   //in studyCollection

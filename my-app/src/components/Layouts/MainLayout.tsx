@@ -6,9 +6,12 @@ import { resetUser } from "../../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 //Components
 import Navbar from "../Navbar/Index";
-import { Flex, useToast } from "@chakra-ui/react";
+import { Flex, useToast, useColorModeValue } from "@chakra-ui/react";
 
 export default function Layout({ children }) {
+  //ColorMode
+  const bg = useColorModeValue("background.light", "background.dark");
+  //
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const toast = useToast();
@@ -105,12 +108,7 @@ export default function Layout({ children }) {
   ]);
 
   return (
-    <Flex
-      minHeight="200vh"
-      minWidth="100%"
-      background={"#1A1A1A"}
-      flexDir={"column"}
-    >
+    <Flex minHeight="200vh" minWidth="100%" background={bg} flexDir={"column"}>
       <Navbar />
       <Flex mt={5} width={"100%"} minH={`calc("100vh")`} justify="center">
         <Flex minH="100%" width={["90%", "90%", "90%", "60%"]}>

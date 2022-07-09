@@ -1,14 +1,21 @@
 import React, { useState } from "react";
+import { useTheme } from "../ThemeContext";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Box } from "@chakra-ui/react";
 
-export default function SignupButton() {
+interface SignupButtonProps {
+  type: "landing" | "nav";
+}
+
+export default function SignupButton({ type }: SignupButtonProps) {
   const [whileHover, setWhileHover] = useState<boolean>(false);
-  //title
-  //location
+  //ColorMode
+  const { theme } = useTheme();
+  console.log("Theme", theme);
 
   return (
+    // <h1>hello</h1>
     <Link to="/signup">
       <motion.div
         onHoverStart={() => setWhileHover(true)}
@@ -16,15 +23,11 @@ export default function SignupButton() {
       >
         <Box position={"relative"}>
           <motion.button
-            style={{
-              borderRadius: "7px",
-              padding: "5px 10px 5px 10px",
-              color: "white",
-              fontSize: "12px",
-              background: "#7928CA",
-              border: "1px solid #7928CA",
-              position: "absolute",
-            }}
+            style={
+              type === "nav"
+                ? theme.buttons.signupButtonNav.initial
+                : theme.buttons.signupButtonLanding.initial
+            }
             initial={{ opacity: 1 }}
             animate={{
               opacity: whileHover ? 0 : 1,
@@ -35,13 +38,11 @@ export default function SignupButton() {
             Train your Brain
           </motion.button>
           <motion.button
-            style={{
-              borderRadius: "7px",
-              padding: "5px 10px 5px 10px",
-              color: "#ffffffb3",
-              fontSize: "12px",
-              border: "1px solid #ffffffb3",
-            }}
+            style={
+              type === "nav"
+                ? theme.buttons.signupButtonNav.hover
+                : theme.buttons.signupButtonLanding.hover
+            }
             initial={{ opacity: 0 }}
             animate={{
               opacity: whileHover ? 1 : 0,

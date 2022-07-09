@@ -1,14 +1,17 @@
 import React, { useState } from "react";
+import { useTheme } from "../ThemeContext";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Box } from "@chakra-ui/react";
 
-interface NavButton {
+interface NavButtonProps {
   title: string;
   url: string;
 }
 
-export default function NavButton({ title, url }: NavButton) {
+export default function NavButton({ title, url }: NavButtonProps) {
+  //ColorMode
+  const { theme } = useTheme();
   const [whileHover, setWhileHover] = useState<boolean>(false);
   //title
   //location
@@ -21,14 +24,7 @@ export default function NavButton({ title, url }: NavButton) {
       <Link to={url}>
         <Box position={"relative"}>
           <motion.button
-            style={{
-              borderRadius: "7px",
-              padding: "5px 10px 5px 10px",
-              color: "#ffffffb3",
-              fontSize: "12px",
-              border: "1px solid #262626",
-              position: "absolute",
-            }}
+            style={theme.buttons.navButton.initial}
             initial={{ opacity: 1 }}
             animate={{
               opacity: whileHover ? 0 : 1,
@@ -39,13 +35,7 @@ export default function NavButton({ title, url }: NavButton) {
             {title}
           </motion.button>
           <motion.button
-            style={{
-              borderRadius: "7px",
-              padding: "5px 10px 5px 10px",
-              color: "#ffffffb3",
-              fontSize: "12px",
-              border: "1px solid #ffffffb3",
-            }}
+            style={theme.buttons.navButton.hover}
             initial={{ opacity: 0 }}
             animate={{
               opacity: whileHover ? 1 : 0,

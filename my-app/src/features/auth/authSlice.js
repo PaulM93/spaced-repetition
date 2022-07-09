@@ -80,7 +80,8 @@ export const authSlice = createSlice({
         //We also want to set the userdata and token
         state.isLoadingAuth = false;
         state.isSuccessAuth = true;
-        state.user = action.payload; //returned data from signup function
+        state.authMessage = action.payload.message;
+        state.user = action.payload.user; //returned data from signup function
       })
       //we get data returned from signup function in action.payload
       .addCase(signup.rejected, (state, action) => {

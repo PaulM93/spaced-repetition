@@ -8,8 +8,11 @@ import Logo from "./Logo";
 import Feedback from "./Feedback";
 import AddCollection from "../CollectionsNew/AddEditCollection";
 ////////
-import { Flex, HStack, useToast } from "@chakra-ui/react";
+import { Flex, HStack, useToast, useColorModeValue } from "@chakra-ui/react";
 export default function AuthNavbar() {
+  //ColorMode
+  const border = useColorModeValue("border.light", "border.dark");
+  //
   const toast = useToast();
   const dispatch = useDispatch();
 
@@ -29,7 +32,7 @@ export default function AuthNavbar() {
       pt={2}
       h="110px"
       w="100%"
-      borderBottom="1px solid #262626"
+      borderBottom={`1px solid ${border}`}
       justify="center"
       boxShadow={
         "rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;"

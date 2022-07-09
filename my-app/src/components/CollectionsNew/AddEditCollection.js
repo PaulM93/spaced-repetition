@@ -108,9 +108,9 @@ export default function AddEditCollection({ type, collection }) {
       style={{
         borderRadius: "7px",
         padding: "5px 10px 5px 10px",
-        color: "#FF0080",
+        color: "#805AD5",
         fontSize: "12px",
-        border: "1px solid #FF0080",
+        border: "1px solid #805AD5",
       }}
     >
       Add Collection
