@@ -1,116 +1,60 @@
-import React, { useEffect, useState, useContext, createContext } from "react";
+import React, { useState, useContext, createContext } from "react";
 
 const ThemeContext = createContext<any>({});
 
 export const ThemeProvider = ({ children }) => {
   //Background colors
 
+  //We need to ensure the theme is set on page refresh
+  // light: "#171923",
+  // lightSubtle: "#4A5568",
+  // dark: "#ffffff",
+  // darkSubtle: "#ffffffb3",
+
+  //Colors
   const purpleMain = "#805AD5";
+  const blackMain = "#171923";
+  const borderSubtle = "#eaeaea";
+  const whiteMain = "#ffffff";
+  const borderRadius = "7px";
   const themes = {
+    //Dark theme
     dark: {
+      collectionCard: {
+        background: "#141414",
+        border: "1px solid #262626",
+        boxShadow:
+          "rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px",
+        borderRadius: "10px",
+        height: "100%",
+        width: "100%",
+      },
       navbar: {
         borderBottom: "1px solid #262626",
       },
       buttons: {
+        addCollectionButton: {
+          borderRadius: "7px",
+          padding: "5px 10px 5px 10px",
+          color: "#805AD5",
+          fontWeight: 500,
+          fontSize: "12px",
+          border: "1px solid #805AD5",
+        },
         signupButtonNav: {
           initial: {
-            borderRadius: "7px",
+            fontWeight: 500,
+            borderRadius: borderRadius,
             padding: "5px 10px 5px 10px",
-            color: "#fafafa",
+            color: whiteMain,
             fontSize: "12px",
             background: purpleMain,
-            border: "1px solid #805AD5",
+            border: `1px solid ${purpleMain}`,
             position: "absolute",
           },
           hover: {
-            borderRadius: "7px",
-            padding: "5px 10px 5px 10px",
-            color: "#805AD5",
-            fontSize: "12px",
-            border: "1px solid #805AD5",
-          },
-        },
-        signupButtonLanding: {
-          initial: {
-            position: "absolute",
-            borderRadius: "5px",
-            width: "200px",
-            fontWeight: "500",
-            marginRight: "10px",
-            color: "#fafafa",
-            padding: "10px 20px 10px 20px",
-            background: "#805AD5",
-            border: "1px solid #805AD5",
-          },
-          hover: {
-            width: "200px",
-            fontWeight: "500",
-            marginRight: "10px",
-            borderRadius: "5px",
-            padding: "10px 20px 10px 20px",
-            color: "#805AD5",
-            border: "1px solid #805AD5",
-          },
-        },
-        navButton: {
-          initial: {
-            borderRadius: "7px",
-            padding: "5px 10px 5px 10px",
-            color: "#805AD5",
-            fontSize: "12px",
-            border: "1px solid #805AD5",
-            position: "absolute",
-          },
-          hover: {
-            borderRadius: "7px",
-            padding: "5px 10px 5px 10px",
-            background: "#805AD5",
-            color: "#fafafa",
-            fontSize: "12px",
-            border: "1px solid #805AD5",
-          },
-        },
-        authButton: {
-          initial: {
-            borderRadius: "7px",
-            padding: "10px 20px 10px 20px",
-            color: "white",
-            width: "100%",
-            fontSize: "16px",
-            background: "#805AD5",
-            border: "1px solid #805AD5",
-            position: "absolute",
-          },
-          hover: {
-            borderRadius: "7px",
-            width: "100%",
-            padding: "10px 20px 10px 20px",
-            color: "#ffffffb3",
-            fontSize: "16px",
-            border: "1px solid #ffffffb3",
-          },
-        },
-      },
-      color: "white",
-      background: "black",
-    },
-    light: {
-      navbar: {
-        borderBottom: "1px solid #eaeaea",
-      },
-      buttons: {
-        signupButtonNav: {
-          initial: {
-            borderRadius: "7px",
-            padding: "5px 10px 5px 10px",
-            color: "white",
-            fontSize: "12px",
-            background: "#805AD5",
-            border: "1px solid #805AD5",
-            position: "absolute",
-          },
-          hover: {
-            borderRadius: "7px",
+            fontWeight: 500,
+            borderRadius: borderRadius,
             padding: "5px 10px 5px 10px",
             color: "#ffffffb3",
             fontSize: "12px",
@@ -120,28 +64,29 @@ export const ThemeProvider = ({ children }) => {
         signupButtonLanding: {
           initial: {
             position: "absolute",
-            borderRadius: "5px",
-            background: "white",
+            borderRadius: borderRadius,
+            background: whiteMain,
             width: "200px",
             fontWeight: "500",
             marginRight: "10px",
             color: "black",
             padding: "10px 20px 10px 20px",
-            border: "1px solid white",
+            border: "1px solid whiteMain",
           },
           hover: {
             width: "200px",
             fontWeight: "500",
             marginRight: "10px",
-            borderRadius: "5px",
+            borderRadius: borderRadius,
             padding: "10px 20px 10px 20px",
-            color: "#805AD5",
-            border: "1px solid #805AD5",
+            color: purpleMain,
+            border: `1px solid ${purpleMain}`,
           },
         },
         navButton: {
           initial: {
-            borderRadius: "7px",
+            fontWeight: 500,
+            borderRadius: borderRadius,
             padding: "5px 10px 5px 10px",
             color: "#ffffffb3",
             fontSize: "12px",
@@ -149,7 +94,8 @@ export const ThemeProvider = ({ children }) => {
             position: "absolute",
           },
           hover: {
-            borderRadius: "7px",
+            fontWeight: 500,
+            borderRadius: borderRadius,
             padding: "5px 10px 5px 10px",
             color: "#ffffffb3",
             fontSize: "12px",
@@ -158,40 +104,157 @@ export const ThemeProvider = ({ children }) => {
         },
         authButton: {
           initial: {
-            borderRadius: "7px",
+            fontWeight: 500,
+            borderRadius: borderRadius,
             padding: "10px 20px 10px 20px",
-            color: "white",
+            color: whiteMain,
             width: "100%",
             fontSize: "16px",
-            background: "#7928CA",
-            border: "1px solid #7928CA",
+            background: purpleMain,
+            border: `1px solid ${purpleMain}`,
             position: "absolute",
           },
           hover: {
-            borderRadius: "7px",
+            fontWeight: 500,
+            borderRadius: borderRadius,
             width: "100%",
             padding: "10px 20px 10px 20px",
             color: "#ffffffb3",
             fontSize: "16px",
             border: "1px solid #ffffffb3",
           },
+          helperText: {
+            color: whiteMain,
+            fontWeight: 500,
+            marginLeft: borderRadius,
+          },
+        },
+      },
+    },
+    light: {
+      collectionCard: {
+        background: "#EDF2F7",
+        border: "1px solid #CBD5E0",
+        boxShadow:
+          "rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px",
+        borderRadius: "10px",
+        height: "100%",
+        width: "100%",
+      },
+      navbar: {
+        borderBottom: "1px solid #eaeaea",
+      },
+      buttons: {
+        addCollectionButton: {
+          borderRadius: "7px",
+          padding: "5px 10px 5px 10px",
+          color: whiteMain,
+          background: purpleMain,
+          fontSize: "12px",
+          fontWeight: 500,
+          border: `1px solid ${purpleMain}`,
+        },
+        signupButtonNav: {
+          initial: {
+            fontWeight: 500,
+            borderRadius: borderRadius,
+            padding: "5px 10px 5px 10px",
+            color: "#fafafa",
+            fontSize: "12px",
+            background: purpleMain,
+            border: `1px solid ${purpleMain}`,
+            position: "absolute",
+          },
+          hover: {
+            fontWeight: 500,
+            borderRadius: borderRadius,
+            padding: "5px 10px 5px 10px",
+            color: purpleMain,
+            fontSize: "12px",
+            border: `1px solid ${purpleMain}`,
+          },
+        },
+        signupButtonLanding: {
+          initial: {
+            position: "absolute",
+            borderRadius: borderRadius,
+            width: "200px",
+            fontWeight: 500,
+            marginRight: "10px",
+            color: "#fafafa",
+            padding: "10px 20px 10px 20px",
+            background: purpleMain,
+            border: `1px solid ${purpleMain}`,
+          },
+          hover: {
+            width: "200px",
+            fontWeight: 500,
+            marginRight: "10px",
+            borderRadius: borderRadius,
+            padding: "10px 20px 10px 20px",
+            color: purpleMain,
+            border: `1px solid ${purpleMain}`,
+          },
+        },
+        navButton: {
+          initial: {
+            fontWeight: 500,
+            borderRadius: borderRadius,
+            padding: "5px 10px 5px 10px",
+            color: purpleMain,
+            fontSize: "12px",
+            border: `1px solid ${borderSubtle}`,
+            position: "absolute",
+          },
+          hover: {
+            fontWeight: 500,
+            borderRadius: borderRadius,
+            padding: "5px 10px 5px 10px",
+            background: purpleMain,
+            color: "#fafafa",
+            fontSize: "12px",
+            border: `1px solid ${purpleMain}`,
+          },
+        },
+        authButton: {
+          initial: {
+            fontWeight: 500,
+            borderRadius: borderRadius,
+            padding: "10px 20px 10px 20px",
+            color: whiteMain,
+            width: "100%",
+            fontSize: "16px",
+            background: "purpleMain",
+            border: `1px solid ${purpleMain}`,
+            position: "absolute",
+          },
+          hover: {
+            fontWeight: 500,
+            borderRadius: borderRadius,
+            width: "100%",
+            padding: "10px 20px 10px 20px",
+            color: purpleMain,
+            fontSize: "16px",
+            border: `1px solid ${purpleMain}`,
+          },
+          helperText: {
+            color: blackMain,
+            marginLeft: borderRadius,
+            fontWeight: 500,
+          },
         },
       },
     },
   };
-  const [themeVal, setThemeVal] = useState("dark");
   const [theme, setTheme] = useState(themes.dark);
-  useEffect(() => {
-    setTheme(themes[themeVal]);
-  }, [themeVal]);
 
   return (
     <>
       <ThemeContext.Provider
         value={{
-          themeVal,
           theme,
-          setThemeVal,
+          themes,
+          setTheme,
         }}
       >
         {children}

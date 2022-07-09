@@ -23,18 +23,28 @@ const theme = extendTheme({
   //make a light mode also
   colors: {
     background: {
+      subtleDark: "#141414",
+      subtleLight: "#EDF2F7",
       dark: "#1A1A1A",
-      light: "#fafafa",
+      light: "#F7FAFC",
     },
     font: {
       light: "#171923",
       lightSubtle: "#4A5568",
-      dark: "#fafafa",
+      dark: "#ffffff",
       darkSubtle: "#ffffffb3",
     },
     border: {
-      light: "#eaeaea",
-      dark: "red",
+      lightSubtle: "#A0AEC0",
+      darkSubtle: "#262626",
+      light: "#EDF2F7",
+      dark: "#eaeaea",
+    },
+    input: {
+      border: {
+        light: "#CBD5E0",
+        dark: "#262626",
+      },
     },
   },
 });

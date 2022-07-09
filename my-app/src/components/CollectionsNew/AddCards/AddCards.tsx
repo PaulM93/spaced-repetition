@@ -4,6 +4,7 @@ import {
   FormControl,
   FormLabel,
   FormErrorMessage,
+  useColorModeValue,
 } from "@chakra-ui/react";
 
 interface AddCardsProps {
@@ -17,19 +18,28 @@ export default function AddCards({
   handleChange,
   cardDetails,
 }: AddCardsProps) {
+  //Color Mode
+  const color = useColorModeValue("font.light", "font.dark");
+  const inputColor = useColorModeValue(
+    "input.border.light",
+    "input.border.dark"
+  );
+
   return (
     <>
       <FormControl isInvalid={cardExists.val && cardExists.id === "front"}>
-        <FormLabel fontSize={"xs"} color={"#ffffffb3"}>
+        <FormLabel fontSize={"xs"} color={color}>
           Front of Card
         </FormLabel>
         <Input
           focusBorderColor={
-            cardExists.val && cardExists.id === "front" ? "red.300" : ""
+            cardExists.val && cardExists.id === "front"
+              ? "red.300"
+              : "purple.500"
           }
-          borderColor={"#262626"}
+          borderColor={inputColor}
           value={cardDetails.front}
-          color="#ffffffb3"
+          color={color}
           onChange={handleChange}
           id="front"
           placeholder="Front of card..."
@@ -43,14 +53,17 @@ export default function AddCards({
         mt={4}
         isInvalid={cardExists.val && cardExists.id === "back"}
       >
-        <FormLabel fontSize={"xs"} color={"#ffffffb3"}>
+        <FormLabel fontSize={"xs"} color={color}>
           Back of Card
         </FormLabel>
         <Input
-          borderColor={"#262626"}
+          borderColor={inputColor}
           focusBorderColor={
-            cardExists.val && cardExists.id === "back" ? "red.300" : ""
+            cardExists.val && cardExists.id === "back"
+              ? "red.300"
+              : "purple.500"
           }
+          color={color}
           value={cardDetails.back}
           onChange={handleChange}
           id="back"

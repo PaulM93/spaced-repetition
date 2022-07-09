@@ -6,13 +6,11 @@ import Logo from "./Logo";
 import SignupButton from "./SignupButton";
 import ColorMode from "./ColorMode";
 ////////
-import { Flex, HStack, useColorModeValue } from "@chakra-ui/react";
+import { Flex, HStack } from "@chakra-ui/react";
 
 export default function NavWithoutUser() {
   //ColorMode
   const { theme } = useTheme();
-  const border = useColorModeValue("border.light", "border.dark");
-  console.log("Border", border);
   //
   return (
     <Flex

@@ -1,5 +1,6 @@
 import React from "react";
-import { Text } from "@chakra-ui/react";
+import { useTheme } from "../ThemeContext";
+import { Text, useColorModeValue } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
 interface HelperTextProps {
@@ -13,13 +14,13 @@ export default function HelperText({
   buttonText,
   url,
 }: HelperTextProps) {
+  const { theme } = useTheme();
+  const text = useColorModeValue("font.lightSubtle", "font.darkSubtle");
   return (
-    <Text fontSize={"sm"} color="#ffffffb3">
+    <Text fontSize={"sm"} color={text}>
       {helperText}
       <Link to={url}>
-        <span style={{ color: "#ffffff", marginLeft: "5px" }}>
-          {buttonText}
-        </span>
+        <span style={theme.buttons.authButton.helperText}>{buttonText}</span>
       </Link>
     </Text>
   );

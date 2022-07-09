@@ -19,10 +19,16 @@ export default function AuthButton({
   const { theme } = useTheme();
   const [whileHover, setWhileHover] = useState<boolean>(false);
 
-  console.log("Themsde", theme);
-
   return (
-    <Box position={"relative"} width="100%" onClick={(e) => handleSubmit(e)}>
+    <motion.div
+      onHoverStart={() => setWhileHover(true)}
+      onHoverEnd={() => setWhileHover(false)}
+      onClick={(e) => handleSubmit(e)}
+      style={{
+        position: "relative",
+        width: "100%",
+      }}
+    >
       <motion.button
         style={theme.buttons.authButton.initial}
         initial={{ opacity: 1 }}
@@ -35,8 +41,6 @@ export default function AuthButton({
         {!loading ? buttonText : "Loading..."}
       </motion.button>
       <motion.button
-        onHoverStart={() => setWhileHover(true)}
-        onHoverEnd={() => setWhileHover(false)}
         style={theme.buttons.authButton.hover}
         aria-label={ariaLabel}
         initial={{ opacity: 0 }}
@@ -47,6 +51,6 @@ export default function AuthButton({
       >
         {!loading ? buttonText : "Loading..."}
       </motion.button>
-    </Box>
+    </motion.div>
   );
 }

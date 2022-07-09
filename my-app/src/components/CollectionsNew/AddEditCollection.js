@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useTheme } from "../ThemeContext";
 import {
   createCollection,
   editCollection,
@@ -21,7 +21,7 @@ import {
   Input,
   FormLabel,
   Textarea,
-  useToast,
+  useColorModeValue,
   Icon,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
@@ -29,14 +29,15 @@ import { FiEdit2 } from "react-icons/fi";
 
 export default function AddEditCollection({ type, collection }) {
   //type == add -- edit
-  const toast = useToast();
+  const { theme } = useTheme();
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef(null);
   const finalRef = React.useRef(null);
 
-  const { isUpdated, isCreated, isLoading, isError, isSuccess, message } =
-    useSelector((state) => state.collection);
+  const { isUpdated, isCreated, isLoading } = useSelector(
+    (state) => state.collection
+  );
 
   useEffect(() => {
     onClose();
@@ -103,16 +104,7 @@ export default function AddEditCollection({ type, collection }) {
   };
 
   const addButton = (
-    <motion.button
-      onClick={onOpen}
-      style={{
-        borderRadius: "7px",
-        padding: "5px 10px 5px 10px",
-        color: "#805AD5",
-        fontSize: "12px",
-        border: "1px solid #805AD5",
-      }}
-    >
+    <motion.button onClick={onOpen} style={theme.buttons.addCollectionButton}>
       Add Collection
     </motion.button>
   );
@@ -121,12 +113,40 @@ export default function AddEditCollection({ type, collection }) {
     <CustomTooltip label={"Edit collection"}>
       <IconButton
         onClick={onOpen}
-        colorScheme={"blackAlpha"}
+        variant="ghost"
+        colorScheme={"gray"}
+        // bg="black.300"
         size="sm"
         aria-label={"Edit collection"}
         icon={<Icon color="#666666" as={FiEdit2} />}
       />
     </CustomTooltip>
+  );
+  // const editButton = (
+  //   <CustomTooltip label={"Edit collection"}>
+  //     <IconButton
+  //       onClick={onOpen}
+  //       colorScheme={"blackAlpha"}
+  //       size="sm"
+  //       aria-label={"Edit collection"}
+  //       icon={<Icon color="#666666" as={FiEdit2} />}
+  //     />
+  //   </CustomTooltip>
+  // );
+
+  //Color Mode
+  const color = useColorModeValue("font.light", "font.dark");
+  const inputColor = useColorModeValue(
+    "input.border.light",
+    "input.border.dark"
+  );
+  const background = useColorModeValue(
+    "background.subtleLight",
+    "background.subtleDark"
+  );
+  const borderColor = useColorModeValue(
+    "border.lightSubtle",
+    "border.darkSubtle"
   );
 
   return (
@@ -135,22 +155,28 @@ export default function AddEditCollection({ type, collection }) {
       <Modal
         initialFocusRef={initialRef}
         finalFocusRef={finalRef}
+        // isOpen={true}
         isOpen={isOpen}
         onClose={onClose}
       >
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>
+        <ModalOverlay bg="blackAlpha.700" />
+        <ModalContent
+          bg={background}
+          p={4}
+          border="1px"
+          borderColor={borderColor}
+        >
+          <ModalHeader color={color}>
             {type === "add" ? "Add a Collection" : "Edit your collection"}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl>
-              <FormLabel>Title</FormLabel>
+              <FormLabel fontSize={"sm"}>Title</FormLabel>
               <Input
                 variant="outline"
-                borderColor={"#262626"}
-                focusBorderColor="green.500"
+                borderColor={inputColor}
+                focusBorderColor="purple.500"
                 errorBorderColor="red.300"
                 value={collectionData.title}
                 onChange={handleChange}
@@ -160,11 +186,11 @@ export default function AddEditCollection({ type, collection }) {
               />
             </FormControl>
             <FormControl mt={4}>
-              <FormLabel>Category</FormLabel>
+              <FormLabel fontSize={"sm"}>Category</FormLabel>
               <Input
                 variant="outline"
-                borderColor={"#262626"}
-                focusBorderColor="green.500"
+                borderColor={inputColor}
+                focusBorderColor="purple.500"
                 errorBorderColor="red.300"
                 value={collectionData.category}
                 onChange={handleChange}
@@ -174,12 +200,12 @@ export default function AddEditCollection({ type, collection }) {
               />
             </FormControl>
             <FormControl mt={4}>
-              <FormLabel>Description</FormLabel>
+              <FormLabel fontSize={"sm"}>Description</FormLabel>
               <Textarea
                 variant="outline"
                 fontSize={"md"}
-                borderColor={"#262626"}
-                focusBorderColor="green.500"
+                borderColor={inputColor}
+                focusBorderColor="purple.500"
                 value={collectionData.description}
                 placeholder="What is your collection?"
                 id="description"
@@ -191,14 +217,18 @@ export default function AddEditCollection({ type, collection }) {
 
           <ModalFooter>
             <Button
+              size="sm"
+              variant="solid"
               isLoading={isLoading}
               onClick={() => handleSubmit()}
-              colorScheme="blue"
+              colorScheme="purple"
               mr={3}
             >
               Submit
             </Button>
-            <Button onClick={onClose}>Cancel</Button>
+            <Button variant="solid" size="sm" onClick={onClose}>
+              Cancel
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

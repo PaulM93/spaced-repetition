@@ -1,6 +1,12 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Flex, Heading, Text, VStack } from "@chakra-ui/react";
+import {
+  Flex,
+  Heading,
+  Text,
+  VStack,
+  useColorModeValue,
+} from "@chakra-ui/react";
 
 interface AuthLayoutProps {
   children: any;
@@ -30,19 +36,23 @@ export default function AuthLayout({
     </motion.div>
   );
 
+  //Color Mode Value
+  const heading = useColorModeValue("font.light", "font.dark");
+  const subHeading = useColorModeValue("font.lightSubtle", "font.darkSubtle");
+
   return (
     <Flex flexDir={"column"} align="center" minW="100%" mt={"100px"}>
       <Flex flexDir={"column"} w={["95%", "80%", "60%", "45%"]}>
         <VStack align={"flex-start"}>
           <Heading
-            color="white"
+            color={heading}
             size={"xl"}
             display="flex"
             alignContent="center"
           >
             {title} {brainIcon}
           </Heading>
-          <Text color="#ffffffb3" align="center">
+          <Text color={subHeading} align="center">
             {subtitle}
           </Text>
         </VStack>

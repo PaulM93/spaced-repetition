@@ -25,13 +25,19 @@ export default function Footer({
         </Box>
         {!viewAllCards && (
           <HStack spacing={2}>
-            <Button onClick={() => handleAddCard()} colorScheme="blue">
+            <Button
+              size="sm"
+              variant="solid"
+              onClick={() => handleAddCard()}
+              colorScheme="purple"
+            >
               Add Card
             </Button>
             <Button
               isDisabled={!cardAdded}
               onClick={() => saveCollection()}
-              colorScheme="blue"
+              variant="solid"
+              size="sm"
               mr={3}
             >
               Save

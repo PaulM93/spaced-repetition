@@ -16,6 +16,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import CustomTooltip from "../../Util/CustomTooltip";
 
@@ -128,6 +129,18 @@ export default function Index({
     onClose();
   };
 
+  //Color Mode
+  const color = useColorModeValue("font.light", "font.dark");
+
+  const background = useColorModeValue(
+    "background.subtleLight",
+    "background.subtleDark"
+  );
+  const borderColor = useColorModeValue(
+    "border.lightSubtle",
+    "border.darkSubtle"
+  );
+
   return (
     <>
       <CustomTooltip label={"Add Cards"}>
@@ -149,12 +162,12 @@ export default function Index({
       >
         <ModalOverlay bg="blackAlpha.700" />
         <ModalContent
-          color="white"
-          bg="#141414"
-          border={"1px solid #262626"}
+          bg={background}
           p={4}
+          border="1px"
+          borderColor={borderColor}
         >
-          <ModalHeader>Add Cards</ModalHeader>
+          <ModalHeader color={color}>Add Cards</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             {!viewAllCards ? (

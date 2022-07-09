@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTheme } from "../ThemeContext";
 import { motion } from "framer-motion";
 import {
   Box,
@@ -13,11 +14,29 @@ import {
   PopoverBody,
   PopoverFooter,
   Flex,
+  useColorModeValue,
 } from "@chakra-ui/react";
 //Components
 import FeedbackEmojis from "./FeedbackEmojis";
 
 export default function Feedback() {
+  //Color Mode
+  const background = useColorModeValue(
+    "background.subtleLight",
+    "background.subtleDark"
+  );
+  const color = useColorModeValue("font.light", "font.dark");
+  const borderColor = useColorModeValue(
+    "border.lightSubtle",
+    "border.darkSubtle"
+  );
+  const inputColor = useColorModeValue(
+    "input.border.light",
+    "input.border.dark"
+  );
+  const inputTextColor = useColorModeValue("font.light", "font.dark");
+
+  const { theme } = useTheme();
   const [whileHover, setWhileHover] = useState<boolean>(false);
   //Get info and submit
   //Use the users signed in email to submit feedback
@@ -58,14 +77,7 @@ export default function Feedback() {
         <PopoverTrigger>
           <Box position={"relative"}>
             <motion.button
-              style={{
-                borderRadius: "7px",
-                padding: "5px 10px 5px 10px",
-                color: "#ffffffb3",
-                fontSize: "12px",
-                border: "1px solid #262626",
-                position: "absolute",
-              }}
+              style={theme.buttons.navButton.initial}
               initial={{ opacity: 1 }}
               animate={{
                 opacity: whileHover ? 0 : 1,
@@ -76,13 +88,7 @@ export default function Feedback() {
               Feedback
             </motion.button>
             <motion.button
-              style={{
-                borderRadius: "7px",
-                padding: "5px 10px 5px 10px",
-                color: "#ffffffb3",
-                fontSize: "12px",
-                border: "1px solid #ffffffb3",
-              }}
+              style={theme.buttons.navButton.hover}
               initial={{ opacity: 0 }}
               animate={{
                 opacity: whileHover ? 1 : 0,
@@ -93,13 +99,21 @@ export default function Feedback() {
             </motion.button>
           </Box>
         </PopoverTrigger>
-        <PopoverContent color="white" bg="#141414" borderColor="#262626">
-          <PopoverArrow bg="#141414" border="none" />
+        <PopoverContent
+          boxShadow={
+            "rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;"
+          }
+          color="white"
+          bg={background}
+          borderColor={borderColor}
+        >
+          <PopoverArrow bg={background} border="none" />
           <PopoverHeader
             p={5}
             fontSize="md"
-            fontWeight="normal"
-            borderColor="#262626"
+            color={color}
+            fontWeight="500"
+            borderColor={borderColor}
           >
             How can we improve?
             <PopoverCloseButton />
@@ -108,20 +122,21 @@ export default function Feedback() {
             <Textarea
               variant="outline"
               fontSize={"sm"}
-              borderColor={"#262626"}
-              focusBorderColor="green.500"
+              borderColor={inputColor}
+              color={inputTextColor}
+              focusBorderColor="purple.500"
               placeholder="What do you think?"
               id="body"
               errorBorderColor="red.300"
               onChange={handleChange}
             />
           </PopoverBody>
-          <PopoverFooter p={5} borderColor="#262626">
+          <PopoverFooter p={5} borderColor={borderColor}>
             <Flex w="100%" justify="space-between">
               <FeedbackEmojis rating={data.rating} setRating={setRating} />
               <Button
                 onClick={() => handleSubmit()}
-                colorScheme={"green"}
+                colorScheme={"purple"}
                 size="sm"
               >
                 Send

@@ -19,6 +19,7 @@ import {
   GridItem,
   IconButton,
   useToast,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { FiMoreVertical } from "react-icons/fi";
 
@@ -73,10 +74,26 @@ export default function CollectionCard({
     dispatch(editCollection(newStateCollection));
   };
 
+  //Color Mode
+  const color = useColorModeValue("font.light", "font.dark");
+  const inputColor = useColorModeValue(
+    "input.border.light",
+    "input.border.dark"
+  );
+  const background = useColorModeValue(
+    "background.subtleLight",
+    "background.subtleDark"
+  );
+  const borderColor = useColorModeValue(
+    "border.lightSubtle",
+    "border.darkSubtle"
+  );
+
   return (
     <GridItem h="200px" width="100%">
       <MotionContainer>
         <Flex
+          color={color}
           flexDir={"column"}
           justifyContent="space-between"
           minHeight="100%"

@@ -10,6 +10,7 @@ import {
   FormErrorMessage,
   InputGroup,
   IconButton,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { ViewIcon, ViewOffIcon } from "@chakra-ui/icons";
 //Components
@@ -101,7 +102,15 @@ export default function AuthPage({ page }) {
     url = "/signin";
     helperButton = "Sign in";
   }
-  console.log(helperText);
+
+  //Color Mode
+  const inputBorderColor = useColorModeValue(
+    "input.border.light",
+    "input.border.dark"
+  );
+  const inputTextColor = useColorModeValue("font.light", "font.dark");
+  const iconColor = useColorModeValue("font.lightSubtle", "font.darkSubtle");
+
   return (
     <>
       <AuthLayout title={title} subtitle={subtitle}>
@@ -113,10 +122,10 @@ export default function AuthPage({ page }) {
               id="email"
               placeholder="Enter your email..."
               size="lg"
-              color="#ffffff"
+              color={inputTextColor}
               fontSize={"md"}
-              borderColor={"#262626"}
-              focusBorderColor="purple.400"
+              borderColor={inputBorderColor}
+              focusBorderColor="purple.500"
               errorBorderColor="red.300"
             />
             {errors.email ? (
@@ -136,10 +145,10 @@ export default function AuthPage({ page }) {
                 placeholder="Enter your password"
                 size="lg"
                 type={show ? "text" : "password"}
-                color="#ffffff"
+                color={inputTextColor}
                 fontSize={"md"}
-                borderColor={"#262626"}
-                focusBorderColor="purple.400"
+                borderColor={inputBorderColor}
+                focusBorderColor="purple.500"
                 errorBorderColor="red.300"
               />
               <InputRightElement>
@@ -149,7 +158,13 @@ export default function AuthPage({ page }) {
                   size="sm"
                   colorScheme={"grey"}
                   aria-label={show ? "Show Password" : "Hide Password"}
-                  icon={show ? <ViewOffIcon /> : <ViewIcon />}
+                  icon={
+                    show ? (
+                      <ViewOffIcon color={iconColor} />
+                    ) : (
+                      <ViewIcon color={iconColor} />
+                    )
+                  }
                   onClick={handleShow}
                 />
               </InputRightElement>

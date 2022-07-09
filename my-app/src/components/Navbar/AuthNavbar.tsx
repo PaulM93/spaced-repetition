@@ -6,6 +6,7 @@ import NavButton from "./NavButton";
 import NavMenu from "./NavMenu";
 import Logo from "./Logo";
 import Feedback from "./Feedback";
+import ColorMode from "./ColorMode";
 import AddCollection from "../CollectionsNew/AddEditCollection";
 ////////
 import { Flex, HStack, useToast, useColorModeValue } from "@chakra-ui/react";
@@ -61,6 +62,7 @@ export default function AuthNavbar() {
           <HStack spacing={1}>
             <NavButton title={"Dashboard"} url={"/dashboard"} />
             <NavButton title={"Settings"} url={"settings"} />
+            <ColorMode />
           </HStack>
           <HStack>
             <AddCollection type={"add"} collection={null} />

@@ -1,19 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useTheme } from "../ThemeContext";
 import { useColorMode, useColorModeValue } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { FiSun, FiMoon } from "react-icons/fi";
 
 export default function ColorMode() {
-  const { setThemeVal, themeVal } = useTheme();
+  const { setTheme, themes } = useTheme();
   const [whileHover, setWhileHover] = useState<boolean>(false);
   const { colorMode, toggleColorMode } = useColorMode();
   const color = useColorModeValue("white", "gray.800");
 
+  console.log("colorMode", colorMode);
+
   const handleColorMode = () => {
     toggleColorMode();
-    themeVal === "dark" ? setThemeVal("light") : setThemeVal("dark");
   };
+
+  useEffect(() => {
+    setTheme(themes[colorMode === "dark" ? "dark" : "light"]);
+  }, [colorMode]);
 
   return (
     <motion.div

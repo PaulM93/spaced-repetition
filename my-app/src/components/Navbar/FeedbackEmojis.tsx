@@ -33,7 +33,7 @@ export default function FeedbackEmojis({
         height: "30px",
         width: "30px",
         borderRadius: "10px",
-        background: rating === i.val ? "#2F855A" : "#262626",
+        background: rating === i.val ? "#805AD5" : "",
       }}
     >
       {i.emoji}
