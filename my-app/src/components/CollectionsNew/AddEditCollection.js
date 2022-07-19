@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useTheme } from "../ThemeContext";
+import MotionIconButton from "../Util/MotionIconButton";
 import {
   createCollection,
   editCollection,
 } from "../../features/collections/collectionsSlice";
-import CustomTooltip from "../Util/CustomTooltip";
+import { FiPlus } from "react-icons/fi";
 import {
   Modal,
   ModalOverlay,
   ModalContent,
-  IconButton,
+  Box,
   ModalHeader,
   ModalFooter,
   ModalBody,
@@ -22,10 +23,8 @@ import {
   FormLabel,
   Textarea,
   useColorModeValue,
-  Icon,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
-import { FiEdit2 } from "react-icons/fi";
 
 export default function AddEditCollection({ type, collection }) {
   //type == add -- edit
@@ -43,18 +42,12 @@ export default function AddEditCollection({ type, collection }) {
     onClose();
     // resetUpdate();
     clearFields();
-  }, [isUpdated, isCreated]);
+  }, [isUpdated, isCreated, onClose]);
 
-  //   interface CollectionData {
-  //     title: String;
-  //     description: String;
-  //     category: String;
-  //   }
   const [collectionData, setCollectionData] = useState({
     title: "",
     description: "", //limit length
     category: "", //limit length,
-    // cards: [],
   });
 
   //If type is edit set details
@@ -103,36 +96,41 @@ export default function AddEditCollection({ type, collection }) {
     }
   };
 
+  const [onHover, setOnHover] = useState(false);
   const addButton = (
-    <motion.button onClick={onOpen} style={theme.buttons.addCollectionButton}>
+    <motion.button
+      onHoverStart={() => setOnHover(true)}
+      onHoverEnd={() => setOnHover(false)}
+      whileHover={{
+        paddingRight: "30px",
+        transition: {
+          duration: 0.2,
+        },
+      }}
+      // whileHover={{ width: "145px" }}
+      onClick={onOpen}
+      style={theme.buttons.addCollectionButton}
+    >
       Add Collection
+      <motion.button
+        style={{
+          position: "absolute",
+          marginLeft: "7px",
+          marginTop: "3px",
+        }}
+        initial={{ opacity: 0, rotate: 0 }}
+        animate={{ opacity: onHover ? 1 : 0, rotate: onHover ? 360 : 0 }}
+      >
+        <FiPlus />
+      </motion.button>
     </motion.button>
   );
 
   const editButton = (
-    <CustomTooltip label={"Edit collection"}>
-      <IconButton
-        onClick={onOpen}
-        variant="ghost"
-        colorScheme={"gray"}
-        // bg="black.300"
-        size="sm"
-        aria-label={"Edit collection"}
-        icon={<Icon color="#666666" as={FiEdit2} />}
-      />
-    </CustomTooltip>
+    <Box onClick={onOpen}>
+      <MotionIconButton iconType={"edit"} label={"Edit Collection"} />
+    </Box>
   );
-  // const editButton = (
-  //   <CustomTooltip label={"Edit collection"}>
-  //     <IconButton
-  //       onClick={onOpen}
-  //       colorScheme={"blackAlpha"}
-  //       size="sm"
-  //       aria-label={"Edit collection"}
-  //       icon={<Icon color="#666666" as={FiEdit2} />}
-  //     />
-  //   </CustomTooltip>
-  // );
 
   //Color Mode
   const color = useColorModeValue("font.light", "font.dark");
@@ -152,6 +150,8 @@ export default function AddEditCollection({ type, collection }) {
   return (
     <>
       {type === "add" ? addButton : editButton}
+
+      {/* <MotionIconButton iconType={"edit"} /> */}
       <Modal
         initialFocusRef={initialRef}
         finalFocusRef={finalRef}

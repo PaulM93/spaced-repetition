@@ -9,7 +9,7 @@ import {
 } from "../features/collections/collectionsSlice";
 //Components
 import CollectionDisplay from "../components/CollectionsNew/CollectionDisplay";
-import StudyCards from "../components/StudyCards/StudyCards";
+import StudyCards from "../components/StudyCards/Index";
 import ReorderCollections from "../components/CollectionsNew/ReorderCollections";
 
 export default function Collections(props) {
@@ -29,7 +29,7 @@ export default function Collections(props) {
       dispatch(getCollections());
       dispatch(reset());
     }
-  }, [collections === null, isUpdated, isCreated, isDeleted, user]);
+  }, [collections === null, isUpdated, isCreated, isDeleted, user, dispatch]);
   //Maybe just run this function adfter upate
 
   //We set study mode to true and the collection
@@ -37,35 +37,38 @@ export default function Collections(props) {
 
   const [collectionData, setCollectionData] = useState([]);
   useEffect(() => {
+    alert("running");
     //Run through and find how many cards are due based off of the due date
     const now = dayjs(Date.now()).toISOString();
     //Update the collections with cards due value
     const collectionArr = [];
     collections.map((collection) => {
-      console.log(collection);
+      // console.log(collection);
       const cards = JSON.parse(collection.cards);
-      // cards.map((card) => {
-      //   console.log(card.dueDate);
-      //   console.log(now);
-      //   if (card.dueDate < now) {
-      //     console.log("less", card.dueDate);
-      //   }
-      // });
       //Find out how many cards are due
+      // console.log("now", now);
+      // cards.map((card) => {
+      //   console.log("card due", card.dueDate);
+      // });
       const due = cards.filter((card) => card.dueDate < now);
       const collectionObj = {
         ...collection,
         cardsDue: due.length,
       };
       console.log(due);
+      // console.log("due", due);
       console.log(collectionObj);
+      // console.log("CollectionObj", collectionObj);
       collectionArr.push(collectionObj);
     });
     setCollectionData(collectionArr);
-    console.log("Collection arr", collectionArr);
+    collectionArr.map((collection) => {
+      console.log(JSON.parse(collection.cards));
+    });
+    // console.log("Collection arr", collectionArr);
   }, [collections]);
 
-  console.log("Collections", collectionData);
+  // console.log("Collections", collectionData);
 
   //Study Mode
   const [studyMode, setStudyMode] = useState(false);
@@ -105,6 +108,7 @@ export default function Collections(props) {
   */
 
   //Save Progress studied
+
   const handleSaveStudy = () => {
     //We want to combine studyCards and reviewedCards
     const newCards = [...cardsNotDue, ...studyCards, ...reviewedCards];
@@ -127,7 +131,7 @@ export default function Collections(props) {
       nextStudyDate: sortedByDueDate[0].dueDate,
       cards: newCards,
     };
-    // console.log("Saved Collection", savedCollectionData);
+    console.log("Saved Collection", savedCollectionData);
     //Update database with saved collection
     dispatch(editCollection(savedCollectionData));
     //Reset
@@ -152,6 +156,7 @@ export default function Collections(props) {
             setOrderDisplay={setOrderDisplay}
           />
         ) : (
+          //To be added
           <ReorderCollections setOrderDisplay={setOrderDisplay} />
         )
       ) : (
@@ -165,121 +170,9 @@ export default function Collections(props) {
           studyCollection={studyCollection}
           studyCards={studyCards}
           setStudyCards={setStudyCards}
+          studyMode={studyMode}
         />
       )}
     </>
   );
 }
-
-// import React, { useState, useEffect } from "react";
-// //Redux
-// import { useSelector, useDispatch } from "react-redux";
-// import {
-//   getCollections,
-//   editCollection,
-//   reset,
-//   resetUpdate,
-// } from "../features/collections/collectionsSlice";
-// //Components
-// import CollectionDisplay from "../components/CollectionsNew/CollectionDisplay";
-// import StudyCards from "../components/StudyCards/StudyCards";
-// import CollectionCard from "../components/CollectionsNew/CollectionCard/CollectionCard";
-// import ReorderCollections from "../components/CollectionsNew/ReorderCollections";
-// import AddEditCollection from "../components/CollectionsNew/AddEditCollection";
-// //ChakraUI
-// import { Grid, Heading, Spinner, Flex, Box } from "@chakra-ui/react";
-
-// export default function Collections(props) {
-//   const {
-//     collections,
-//     isLoading,
-//     isError,
-//     isCreated,
-//     isSuccess,
-//     message,
-//     isDeleted,
-//     isUpdated,
-//   } = useSelector((state: { collection: any }) => state.collection);
-//   const dispatch = useDispatch();
-//   useEffect(() => {
-//     //Retrieve collections on page load
-//     dispatch < any > getCollections();
-//     dispatch(reset());
-//   }, [collections === null, isUpdated, isCreated, isDeleted]);
-//   //Maybe just run this function adfter upate
-
-//   //We set study mode to true and the collection
-//   const [orderDisplay, setOrderDisplay] = useState(false);
-
-//   //Study Mode
-//   const [studyMode, setStudyMode] = useState < boolean > false;
-//   const [studyCollection, setStudyCollection] = useState < any > {};
-
-//   const resetStudyMode = () => {
-//     setStudyMode(false);
-//     handleSaveStudy();
-//     setStudyCollection({});
-//   };
-//   const handleStudyMode = (collection) => {
-//     setStudyMode(true);
-//     setStudyCollection(collection);
-//     setStudyCards(collection.cards);
-//   };
-
-//   // const handleEditCollection = (collectionData: any) => {
-//   //   //We need the id of the collection
-//   //   dispatch<any>(editCollection("collections/edit", collectionData));
-//   // };
-
-//   const [studyCards, setStudyCards] = useState([]);
-//   const [reviewedCards, setReviewedCards] = useState([]);
-//   //Make state for study cards --- when study mode is activated we set this state
-
-//   const handleSaveStudy = () => {
-//     //We want to combine studyCards and reviewedCards
-//     const newCards = [...studyCards, ...reviewedCards];
-//     const savedCollectionData = {
-//       ...studyCollection,
-//       cards: newCards,
-//     };
-//     console.log("Saved Collection", savedCollectionData);
-//     //Update database with saved collection
-//     dispatch(editCollection(savedCollectionData));
-//     setStudyMode(false);
-//     console.log("Save", newCards);
-//   };
-//   console.log("Study cards", studyCards);
-//   console.log("Reviewed cards", reviewedCards);
-
-//   //When we submit we set the reviewedCards as the cards
-//   //in studyCollection
-
-//   return (
-//     <>
-//       {!studyMode ? (
-//         !orderDisplay ? (
-//           <CollectionDisplay
-//             collections={collections}
-//             isLoading={isLoading}
-//             handleStudyMode={handleStudyMode}
-//             setOrderDisplay={setOrderDisplay}
-//           />
-//         ) : (
-//           <ReorderCollections setOrderDisplay={setOrderDisplay} />
-//         )
-//       ) : (
-//         <StudyCards
-//           handleSaveStudy={handleSaveStudy}
-//           setStudyCollection={setStudyCollection}
-//           reviewedCards={reviewedCards}
-//           setReviewedCards={setReviewedCards}
-//           handleStudyMode={handleStudyMode}
-//           resetStudyMode={resetStudyMode}
-//           studyCollection={studyCollection}
-//           studyCards={studyCards}
-//           setStudyCards={setStudyCards}
-//         />
-//       )}
-//     </>
-//   );
-// }

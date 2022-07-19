@@ -10,8 +10,6 @@ export default function ColorMode() {
   const { colorMode, toggleColorMode } = useColorMode();
   const color = useColorModeValue("white", "gray.800");
 
-  console.log("colorMode", colorMode);
-
   const handleColorMode = () => {
     toggleColorMode();
   };

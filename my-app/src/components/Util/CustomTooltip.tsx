@@ -10,9 +10,11 @@ export default function CustomTooltip({ children, label }: CustomTooltipProps) {
   return (
     <>
       <Tooltip
-        border="1px solid white"
+        hasArrow
+        position={"absolute"}
+        color="#fafafa"
         label={label}
-        bg="blackAlpha"
+        bg="#805AD5"
         borderRadius="5px"
       >
         {children}

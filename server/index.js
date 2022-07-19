@@ -19,7 +19,7 @@ const {
   changeEmail,
 } = require("./handlers/auth");
 //User
-const { getUser, updateUser } = require("./handlers/users");
+const { getUser, updateUser, sendFeedback } = require("./handlers/users");
 //Collecions
 const {
   getCollections,
@@ -38,6 +38,7 @@ app.post("/changeEmail", authenticateToken, changeEmail);
 //User Routes
 app.get("/user", authenticateToken, getUser);
 app.post("/user", authenticateToken, updateUser);
+app.post("/feedback", authenticateToken, sendFeedback);
 //Collection Routes
 app.get("/user/collection", authenticateToken, getCollections);
 app.post("/user/collection", authenticateToken, createCollection);

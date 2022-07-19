@@ -20,6 +20,7 @@ const theme = extendTheme({
     initialColorMode: "dark",
     useSystemColorMode: true,
   },
+  shadows: { outline: "none" },
   //make a light mode also
   colors: {
     background: {
@@ -35,7 +36,8 @@ const theme = extendTheme({
       darkSubtle: "#ffffffb3",
     },
     border: {
-      lightSubtle: "#A0AEC0",
+      lightSubtle: "#eaeaea",
+      // lightSubtle: "#A0AEC0",
       darkSubtle: "#262626",
       light: "#EDF2F7",
       dark: "#eaeaea",

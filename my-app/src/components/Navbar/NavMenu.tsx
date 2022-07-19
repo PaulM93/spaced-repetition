@@ -7,6 +7,7 @@ import {
   MenuList,
   MenuDivider,
   MenuItem,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import { FiUser, FiLogOut } from "react-icons/fi";
 
@@ -15,20 +16,41 @@ interface NavMenuProps {
 }
 
 export default function NavMenu({ signUserOut }: NavMenuProps) {
+  //Color Mode
+  const background = useColorModeValue(
+    "background.light",
+    "background.subtleDark"
+  );
+  const color = useColorModeValue("font.light", "font.dark");
+  const borderColor = useColorModeValue("#eaeaea", "border.darkSubtle");
+  const inputColor = useColorModeValue(
+    "input.border.light",
+    "input.border.dark"
+  );
+  const inputTextColor = useColorModeValue("font.light", "font.dark");
+  const focusColor = useColorModeValue(
+    "background.light",
+    "background.subtleDark"
+  );
   return (
     <Menu closeOnSelect={true}>
       <MenuButton>
-        <Avatar size="xs" ml={2} bgGradient="linear(to-l, #7928CA, #FF0080)" />
+        <Avatar
+          size="xs"
+          ml={2}
+          bgGradient="linear(to-l, purple.500, purple.800)"
+        />
       </MenuButton>
       <MenuList
         minWidth="240px"
-        color="white"
-        bg="#141414"
-        borderColor="#262626"
+        color={color}
+        bg={background}
+        borderColor={borderColor}
       >
         <Link to="/profile">
           <MenuItem
-            _focusWithin={{ bg: "black" }}
+            fontWeight={500}
+            _focusWithin={{ bg: focusColor }}
             autoFocus={false}
             fontSize="sm"
             icon={<FiUser />}
@@ -36,9 +58,10 @@ export default function NavMenu({ signUserOut }: NavMenuProps) {
             My Profile
           </MenuItem>
         </Link>
-        <MenuDivider borderColor="#262626" />
+        <MenuDivider borderColor={borderColor} />
         <MenuItem
-          _focusWithin={{ bg: "black" }}
+          fontWeight={500}
+          _focusWithin={{ bg: focusColor }}
           autoFocus={false}
           fontSize="sm"
           icon={<FiLogOut />}

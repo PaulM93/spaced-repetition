@@ -1,6 +1,6 @@
 import React from "react";
-import { motion } from "framer-motion";
-import { VStack } from "@chakra-ui/react";
+import { VStack, Button, useColorModeValue, Icon } from "@chakra-ui/react";
+import { FiUser, FiTool, FiLogOut } from "react-icons/fi";
 
 interface ControlButtonsProps {
   setSelectedPage: (val: string) => void;
@@ -13,32 +13,35 @@ export default function ControlButtons({
   selectedPage,
   signUserOut,
 }: ControlButtonsProps) {
-  const buttonArr = ["General", "Settings", "Logout"];
+  const buttonColor = useColorModeValue("purple", "gray");
+  const borderColor = useColorModeValue("#eaeaea", "#262626");
+  const buttonArr = [
+    { title: "General", icon: <Icon as={FiUser} /> },
+    { title: "Settings", icon: <Icon as={FiTool} /> },
+    { title: "Logout", icon: <Icon as={FiLogOut} /> },
+  ];
+  // const buttonArr = [{title: "General", icon: <MdBuild/>}, "Settings", "Logout"];
   return (
     <VStack minWidth={"100%"}>
       {buttonArr.map((button) => (
-        <motion.button
+        <Button
+          borderRadius={"5px"}
+          leftIcon={button.icon}
+          borderColor={borderColor}
+          fontWeight="500"
+          fontSize="14px"
           onClick={
-            button !== "Logout"
-              ? () => setSelectedPage(button)
+            button.title !== "Logout"
+              ? () => setSelectedPage(button.title)
               : () => signUserOut()
           }
-          style={{
-            minWidth: "100%",
-            padding: "10px",
-            border:
-              selectedPage === button ? "1px solid #fff" : "1px solid #262626",
-            fontSize: "12px",
-            borderRadius: "7px",
-            color: "#ffffffb3",
-            display: "flex",
-            justifyContent: "flex-start",
-            alignItems: "center",
-          }}
-          //Put cool subtle animation of gray background which moves
+          size="md"
+          colorScheme={buttonColor}
+          variant={selectedPage === button.title ? "solid" : "outline"}
+          width="100%"
         >
-          {button}
-        </motion.button>
+          {button.title}
+        </Button>
       ))}
     </VStack>
   );

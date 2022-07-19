@@ -1,5 +1,5 @@
 import React from "react";
-import { Flex, Button, Box } from "@chakra-ui/react";
+import { Flex, Button, Box, useColorModeValue } from "@chakra-ui/react";
 import Title from "./Title";
 
 interface ProfileWrapperProps {
@@ -24,17 +24,20 @@ export default function ProfileWrapper({
   loadingType,
   loading,
 }: ProfileWrapperProps) {
+  //Color Mode
+  const color = useColorModeValue("font.light", "font.dark");
+  const borderColor = useColorModeValue("#eaeaea", "border.darkSubtle");
+
   return (
     <Flex
       width="100%"
-      border="1px solid #262626"
-      boxShadow="rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px"
+      border="1px"
+      borderColor={borderColor}
       borderRadius={"5px"}
-      color="#fafafa"
+      color={color}
       p={10}
       mb={4}
       justify={"center"}
-      borderBottom="1px solid #262626"
     >
       <Flex
         flexDir={"column"}
@@ -50,7 +53,7 @@ export default function ProfileWrapper({
             onClick={() => handleSubmit(type)}
             variant="outline"
             size={"sm"}
-            colorScheme={"purple"}
+            colorScheme={"gray"}
           >
             Save
           </Button>

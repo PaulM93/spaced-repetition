@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { editCollection } from "../../../features/collections/collectionsSlice";
 //Components
-import CustomTooltip from "../../Util/CustomTooltip";
 import MotionContainer from "./MotionContainer";
 import TitleDisplay from "./TitleDisplay";
 import LastStudied from "./LastStudied";
@@ -14,32 +13,36 @@ import AddCards from "../AddCards/Index";
 import {
   Box,
   Flex,
-  Icon,
   HStack,
   GridItem,
-  IconButton,
   useToast,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { FiMoreVertical } from "react-icons/fi";
 
-export default function CollectionCard({
-  setOrderDisplay,
-  collection,
-  handleStudyMode,
-}) {
+export default function CollectionCard({ collection, handleStudyMode }) {
   const toast = useToast();
   const dispatch = useDispatch();
 
   //Collection data
   const [collectionData, setcollectionData] = useState({
-    title: collection.title,
-    description: collection.description,
-    category: collection.category,
-    cards: JSON.parse(collection.cards),
-    id: collection.id,
-    nextStudyDate: collection.nextStudyDate,
+    title: "",
+    description: "",
+    category: "",
+    cards: [],
+    id: "",
+    nextStudyDate: "",
   });
+
+  useEffect(() => {
+    setcollectionData({
+      title: collection.title,
+      description: collection.description,
+      category: collection.category,
+      cards: JSON.parse(collection.cards),
+      id: collection.id,
+      nextStudyDate: collection.nextStudyDate,
+    });
+  }, [collection]);
 
   const setToast = (statusType, title) => {
     toast({
@@ -50,14 +53,29 @@ export default function CollectionCard({
     });
   };
 
+  console.log("CollectionData CCard", collectionData);
+
+  //We need to ensure the data here is fresh from a study session
+
   //Add Cards
   const handleAddCards = (newCard) => {
+    // console.log("CollectionData", collectionData);
+
+    const collectionCardArr = collectionData.cards;
+    console.log("CollectionCardArr", collectionCardArr);
+    const newCardArr = [...collectionCardArr, newCard];
+    console.log("NewcardArr", newCardArr);
     setcollectionData({
       ...collectionData,
-      cards: [...collectionData.cards, newCard],
+      cards: newCardArr,
     });
+    // setCardsToBeSaved([...cardsToBeSaved, newCard]);
     setToast("success", "Card Added");
   };
+
+  // console.log("Cards to be saved", cardsToBeSaved);
+
+  // console.log("Collection data", collectionData);
 
   //Move this to the dashboard
   const saveCollection = () => {
@@ -76,18 +94,6 @@ export default function CollectionCard({
 
   //Color Mode
   const color = useColorModeValue("font.light", "font.dark");
-  const inputColor = useColorModeValue(
-    "input.border.light",
-    "input.border.dark"
-  );
-  const background = useColorModeValue(
-    "background.subtleLight",
-    "background.subtleDark"
-  );
-  const borderColor = useColorModeValue(
-    "border.lightSubtle",
-    "border.darkSubtle"
-  );
 
   return (
     <GridItem h="200px" width="100%">
@@ -105,8 +111,9 @@ export default function CollectionCard({
                 title={collection.title}
                 cardsDue={collection.cardsDue}
               />
+              <p>No: {collectionData.cards.length}</p>
               <Box>
-                <CustomTooltip label={"Change Order"}>
+                {/* <CustomTooltip label={"Change Order"}>
                   <IconButton
                     onClick={() => setOrderDisplay(true)}
                     size="sm"
@@ -115,7 +122,7 @@ export default function CollectionCard({
                     aria-label="Change Order"
                     icon={<Icon mt={1} as={FiMoreVertical} />}
                   />
-                </CustomTooltip>
+                </CustomTooltip> */}
               </Box>
             </Flex>
           </Flex>

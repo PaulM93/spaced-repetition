@@ -59,9 +59,12 @@ exports.signup = (req, res) => {
                     // refreshTokens.push(refreshToken);
                     //Return user data when created
                     res.status(202).send({
-                      userID: user.userID,
-                      accessToken: accessToken,
-                      refreshToken: refreshToken,
+                      message: "Welcome to Spaced",
+                      user: {
+                        userID: user.userID,
+                        accessToken: accessToken,
+                        refreshToken: refreshToken,
+                      },
                     });
                   }
                 });
@@ -95,9 +98,7 @@ exports.signin = (req, res) => {
         }
         if (result.length === 0) {
           //No user exists
-          res
-            .status(401)
-            .send({ message: "Wrong username/password combination" });
+          res.status(401).send({ message: "No user exists with this email" });
         } else {
           //If there is a user we can compare the password and return an authtoken
           if (result) {

@@ -18,7 +18,7 @@ export default function Landing() {
     <Flex
       minHeight={'calc("100vh - 80px")'}
       flexDir="column"
-      mt={5}
+      mt={12}
       minWidth={"100%"}
       alignItems={"center"}
     >
@@ -77,18 +77,6 @@ export default function Landing() {
       </VStack>
       <HStack position={"relative"}>
         <SignupButton type={"landing"} />
-
-        {/* <motion.button
-          style={{
-            // position: "absolute",
-            borderRadius: "5px",
-            color: "#ffffffb3",
-            padding: "10px 20px 10px 20px",
-            border: "1px solid #262626",
-          }}
-        >
-          Find out more
-        </motion.button> */}
       </HStack>
     </Flex>
   );

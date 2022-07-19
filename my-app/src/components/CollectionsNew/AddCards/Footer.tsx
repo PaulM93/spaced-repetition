@@ -1,6 +1,5 @@
 import React from "react";
 import { Flex, ModalFooter, Button, Box, HStack } from "@chakra-ui/react";
-import MotionButton from "../../Util/MotionButton";
 
 interface FooterProps {
   setViewAllCards: (val: boolean) => void;
@@ -8,6 +7,7 @@ interface FooterProps {
   saveCollection: () => void;
   handleAddCard: () => void;
   cardAdded: boolean;
+  cardsExist: number;
 }
 
 export default function Footer({
@@ -15,14 +15,22 @@ export default function Footer({
   viewAllCards,
   saveCollection,
   handleAddCard,
+  cardsExist,
   cardAdded,
 }: FooterProps) {
   return (
     <ModalFooter>
       <Flex w="100%" justify="space-between">
-        <Box onClick={() => setViewAllCards(!viewAllCards)}>
-          <MotionButton text={!viewAllCards ? "View all Cards" : "Go back"} />
-        </Box>
+        {cardsExist !== 0 ? (
+          <Box onClick={() => setViewAllCards(!viewAllCards)}>
+            {/* dont show button if cards.length === 0  */}
+            <Button variant={"outline"} size="sm" colorScheme={"purple"}>
+              {!viewAllCards ? "View all Cards" : "Go back"}
+            </Button>
+          </Box>
+        ) : (
+          <div></div>
+        )}
         {!viewAllCards && (
           <HStack spacing={2}>
             <Button
@@ -35,6 +43,7 @@ export default function Footer({
             </Button>
             <Button
               isDisabled={!cardAdded}
+              colorScheme="green"
               onClick={() => saveCollection()}
               variant="solid"
               size="sm"

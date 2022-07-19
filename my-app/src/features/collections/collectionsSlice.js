@@ -24,7 +24,7 @@ export const getCollections = createAsyncThunk(
       //Get collections here -- token stored here in localStorage
       const accessToken = thunkAPI.getState().auth.user.accessToken;
       const data = await collectionService.getCollections(accessToken);
-      console.log(data);
+      // console.log(data);
       return data;
     } catch (error) {
       return thunkAPI.rejectWithValue(handleErrorMessage(error));
@@ -52,14 +52,10 @@ export const createCollection = createAsyncThunk(
 //Edit Collection
 export const editCollection = createAsyncThunk(
   "collections/edit",
-  async (collectionData, thunkAPI) => {
+  async (id: string, thunkAPI) => {
     try {
-      console.log("CollectionData", collectionData);
       const accessToken = thunkAPI.getState().auth.user.accessToken;
-      return await collectionService.editCollection(
-        collectionData,
-        accessToken
-      );
+      return await collectionService.editCollection(id, accessToken);
     } catch (error) {
       return thunkAPI.rejectWithValue(handleErrorMessage(error));
     }

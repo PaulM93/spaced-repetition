@@ -1,4 +1,5 @@
 import React from "react";
+import { useTheme } from "../ThemeContext";
 import { useDispatch } from "react-redux";
 import { signout, resetAuth } from "../../features/auth/authSlice";
 //Components
@@ -8,12 +9,11 @@ import Logo from "./Logo";
 import Feedback from "./Feedback";
 import ColorMode from "./ColorMode";
 import AddCollection from "../CollectionsNew/AddEditCollection";
-////////
-import { Flex, HStack, useToast, useColorModeValue } from "@chakra-ui/react";
+///////////////
+import { Flex, HStack, useToast } from "@chakra-ui/react";
 export default function AuthNavbar() {
   //ColorMode
-  const border = useColorModeValue("border.light", "border.dark");
-  //
+  const { theme } = useTheme();
   const toast = useToast();
   const dispatch = useDispatch();
 
@@ -33,7 +33,7 @@ export default function AuthNavbar() {
       pt={2}
       h="110px"
       w="100%"
-      borderBottom={`1px solid ${border}`}
+      style={theme.navbar}
       justify="center"
       boxShadow={
         "rgba(0, 0, 0, 0.1) 0px 0px 5px 0px, rgba(0, 0, 0, 0.1) 0px 0px 1px 0px;"

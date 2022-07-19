@@ -1,5 +1,5 @@
 import React from "react";
-import { Input, Box, Text } from "@chakra-ui/react";
+import { Input, Box, Text, useColorModeValue } from "@chakra-ui/react";
 
 interface TextInputProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>, type: string) => void;
@@ -18,9 +18,15 @@ export default function TextInput({
   title,
   type,
 }: TextInputProps) {
+  //Color Mode
+  const inputColor = useColorModeValue(
+    "input.border.light",
+    "input.border.dark"
+  );
+  const inputTextColor = useColorModeValue("font.light", "font.dark");
   return (
     <Box mt={4}>
-      <Text fontSize={"xs"} mb="8px">
+      <Text fontWeight="500" fontSize={"xs"} mb="8px">
         {title}
       </Text>
       <Input
@@ -30,10 +36,10 @@ export default function TextInput({
         id={id}
         placeholder={placeholder}
         size="md"
-        color="#ffffff"
         fontSize={"sm"}
-        borderColor={"#262626"}
-        focusBorderColor="purple.400"
+        borderColor={inputColor}
+        color={inputTextColor}
+        focusBorderColor="purple.500"
         errorBorderColor="red.300"
       />
     </Box>

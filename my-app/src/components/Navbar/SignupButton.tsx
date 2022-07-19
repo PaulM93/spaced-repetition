@@ -35,7 +35,7 @@ export default function SignupButton({ type }: SignupButtonProps) {
             }}
             aria-label={"Sign up"}
           >
-            Train your Brain
+            Train your Brain 🧠
           </motion.button>
           <motion.button
             style={
@@ -49,7 +49,7 @@ export default function SignupButton({ type }: SignupButtonProps) {
               transition: { duration: 0.5 },
             }}
           >
-            Train your Brain
+            Train your Brain 🧠
           </motion.button>
         </Box>
       </motion.div>

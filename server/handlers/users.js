@@ -1,4 +1,6 @@
 const dbConfig = require("../config/db.config");
+require("dotenv").config();
+const nodemailer = require("nodemailer");
 const db = dbConfig.connection;
 //Get User
 exports.getUser = (req, res) => {
@@ -40,4 +42,41 @@ exports.updateUser = (req, res) => {
     });
     res.send(results);
   });
+};
+
+//Send User Feedback
+exports.sendFeedback = (req, res) => {
+  return res
+    .status(500)
+    .send({ message: "This feature is currently not in place yet." });
+  // const email = req.body.email;
+  // const message = req.body.message;
+
+  // const transporter = nodemailer.createTransport({
+  //   service: "gmail",
+  //   auth: {
+  //     user: process.env.NODEMAILER_ACCOUNT,
+  //     pass: process.env.NODEMAILER_PASSWORD, //env
+  //   },
+  // });
+
+  // console.log("transporter", transporter);
+
+  // const mailOptions = {
+  //   from: email,
+  //   to: process.env.NODEMAILER_ACCOUNT,
+  //   subject: `New Spaced email from ${email}`,
+  //   text: message,
+  // };
+
+  // transporter.sendMail(mailOptions, (error, info) => {
+  //   if (error) {
+  //     console.log(error);
+  //     return res
+  //       .status(500)
+  //       .send({ message: "There was a problem :(", error: error });
+  //   } else {
+  //     return res.status(200).send({ message: "Thank you for your feedback" });
+  //   }
+  // });
 };

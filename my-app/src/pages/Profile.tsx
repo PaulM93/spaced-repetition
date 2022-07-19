@@ -161,7 +161,7 @@ export default function Profile() {
         "repeat(3, 1fr)",
         "repeat(3, 1fr)",
       ]}
-      gap={6}
+      gap={4}
       minWidth="100%"
     >
       <GridItem colSpan={1}>

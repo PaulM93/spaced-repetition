@@ -1,7 +1,15 @@
 import React from "react";
 import CollectionCard from "./CollectionCard/CollectionCard";
 import AddEditCollection from "./AddEditCollection";
-import { Grid, Heading, Spinner, Flex } from "@chakra-ui/react";
+import About from "../About/About";
+import {
+  Grid,
+  Heading,
+  Spinner,
+  Flex,
+  useColorModeValue,
+  HStack,
+} from "@chakra-ui/react";
 
 export default function CollectionDisplay({
   collections,
@@ -11,13 +19,16 @@ export default function CollectionDisplay({
   setStudyCards,
   setCardsNotDue,
 }) {
+  //Color Mode
+  const color = useColorModeValue("font.light", "font.dark");
+
   const loadingMarkup = (
     <Flex width="100%" justify={"center"} mt={10}>
       <Spinner size="sm" color="#fff" />
     </Flex>
   );
 
-  console.log("isLoading", isLoading);
+  // console.log("Collection Display", collections);
 
   return isLoading && !collections ? (
     loadingMarkup
@@ -44,11 +55,20 @@ export default function CollectionDisplay({
       ))}
     </Grid>
   ) : (
-    <Flex mt={5} flexDir={"column"} minWidth="100%" align="center">
-      <Heading size="sm" color="white" mb={5}>
+    <Flex
+      minHeight={"fit-content"}
+      mt={5}
+      flexDir={"column"}
+      minWidth="100%"
+      align="center"
+    >
+      <Heading size="sm" color={color} mb={5}>
         Get Started by creating a collection
       </Heading>
-      <AddEditCollection type={"add"} collection={null} />
+      <HStack>
+        <AddEditCollection type={"add"} collection={null} />
+        <About />
+      </HStack>
     </Flex>
   );
 }

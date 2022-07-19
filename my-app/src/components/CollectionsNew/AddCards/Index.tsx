@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-import { FiPlus } from "react-icons/fi";
 import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 //Components
@@ -9,16 +8,16 @@ import Footer from "./Footer";
 import {
   Modal,
   useDisclosure,
-  Icon,
-  IconButton,
+  Box,
   ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalBody,
   ModalCloseButton,
   useColorModeValue,
+  Text,
 } from "@chakra-ui/react";
-import CustomTooltip from "../../Util/CustomTooltip";
+import MotionIconButton from "../../Util/MotionIconButton";
 
 interface CardDetails {
   front: string;
@@ -48,6 +47,8 @@ export default function Index({
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = useRef(null);
   const initialRef = useRef(null);
+
+  console.log("Collection Cards", JSON.parse(cards));
 
   //View
   const [viewAllCards, setViewAllCards] = useState(false);
@@ -106,6 +107,13 @@ export default function Index({
     });
   };
 
+  useEffect(() => {
+    if (allCards.length === 0) {
+      setCardAdded(false);
+      setViewAllCards(false);
+    }
+  }, [allCards.length]);
+
   const resetObject = {
     ...cardDetails,
     front: "",
@@ -118,6 +126,8 @@ export default function Index({
     //When card is added create an identical copy but with front and back reversed
     setCardAdded(true);
     //dont allow user to save if they havent added any new cards
+    // console.log("Card Details", cardDetails);
+
     setCardDetails(resetObject);
     handleAddCards(cardDetails);
     // setCards([...cards, cardDetails]);
@@ -125,6 +135,7 @@ export default function Index({
 
   const handleClose = () => {
     setViewAllCards(false);
+    setCardAdded(false);
     setCardDetails(resetObject);
     onClose();
   };
@@ -143,17 +154,11 @@ export default function Index({
 
   return (
     <>
-      <CustomTooltip label={"Add Cards"}>
-        <IconButton
-          onClick={onOpen}
-          colorScheme={"blackAlpha"}
-          size="sm"
-          aria-label={"Add Cards"}
-          icon={<Icon color="#666666" as={FiPlus} />}
-        />
-      </CustomTooltip>
+      <Box onClick={onOpen}>
+        <MotionIconButton label={"Add Cards"} iconType={"add"} />
+      </Box>
       <Modal
-        size={viewAllCards ? "md" : "xl"}
+        size={"xl"}
         closeOnOverlayClick={false}
         initialFocusRef={initialRef}
         finalFocusRef={finalRef}
@@ -167,9 +172,17 @@ export default function Index({
           border="1px"
           borderColor={borderColor}
         >
-          <ModalHeader color={color}>Add Cards</ModalHeader>
+          <ModalHeader color={color}>
+            {!viewAllCards ? "Add Cards" : "View all Cards"}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
+            {viewAllCards ? (
+              <Text fontSize="xs" mb={2}>
+                Click text to edit card.
+              </Text>
+            ) : null}
+
             {!viewAllCards ? (
               <AddCards
                 cardDetails={cardDetails}
@@ -189,6 +202,7 @@ export default function Index({
             )}
           </ModalBody>
           <Footer
+            cardsExist={allCards.length}
             cardAdded={cardAdded}
             handleAddCard={handleAddCard}
             setViewAllCards={setViewAllCards}

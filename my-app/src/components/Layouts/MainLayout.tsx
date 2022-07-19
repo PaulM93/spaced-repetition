@@ -6,6 +6,7 @@ import { resetUser } from "../../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 //Components
 import Navbar from "../Navbar/Index";
+import Footer from "../Footer/Footer";
 import { Flex, useToast, useColorModeValue } from "@chakra-ui/react";
 
 export default function Layout({ children }) {
@@ -108,13 +109,28 @@ export default function Layout({ children }) {
   ]);
 
   return (
-    <Flex minHeight="200vh" minWidth="100%" background={bg} flexDir={"column"}>
-      <Navbar />
-      <Flex mt={5} width={"100%"} minH={`calc("100vh")`} justify="center">
-        <Flex minH="100%" width={["90%", "90%", "90%", "60%"]}>
-          {children}
+    <>
+      <Flex
+        minHeight="100vh"
+        minWidth="100%"
+        background={bg}
+        pb={20}
+        flexDir={"column"}
+      >
+        <Navbar />
+        <Flex
+          mt={5}
+          pb={20}
+          width={"100%"}
+          minH={`calc("100vh")`}
+          justify="center"
+        >
+          <Flex minH="100%" width={["90%", "90%", "90%", "60%"]}>
+            {children}
+          </Flex>
         </Flex>
       </Flex>
-    </Flex>
+      <Footer />
+    </>
   );
 }

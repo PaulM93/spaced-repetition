@@ -41,10 +41,10 @@ const editCollection = async (collectionData, accessToken) => {
 };
 
 //Delete Collection
-const deleteCollection = async (collectionData, accessToken) => {
-  // console.log("DeleteData", collectionData);
+const deleteCollection = async (id, accessToken) => {
+  // console.log("DeleteData", id);
   const url = "/user/collection/delete";
-  const data = { id: collectionData };
+  const data = { id: id };
   // console.log(url);
   const response = await axios.post(
     COLLECTION_URL + "/delete",

@@ -22,7 +22,7 @@ import FeedbackEmojis from "./FeedbackEmojis";
 export default function Feedback() {
   //Color Mode
   const background = useColorModeValue(
-    "background.subtleLight",
+    "background.light",
     "background.subtleDark"
   );
   const color = useColorModeValue("font.light", "font.dark");
@@ -65,7 +65,7 @@ export default function Feedback() {
 
   const handleSubmit = () => {
     console.log(data);
-    alert("Submitted");
+    alert("Not working atm");
   };
 
   return (
