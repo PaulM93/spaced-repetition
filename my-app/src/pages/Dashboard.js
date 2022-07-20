@@ -37,7 +37,7 @@ export default function Collections(props) {
 
   const [collectionData, setCollectionData] = useState([]);
   useEffect(() => {
-    alert("running");
+    // alert("running");
     //Run through and find how many cards are due based off of the due date
     const now = dayjs(Date.now()).toISOString();
     //Update the collections with cards due value

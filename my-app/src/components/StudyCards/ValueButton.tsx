@@ -1,5 +1,6 @@
-import React from "react";
-import { Button, Box, Flex } from "@chakra-ui/react";
+import React, { useState } from "react";
+import { useTheme } from "../ThemeContext";
+import { motion } from "framer-motion";
 
 interface ValueButtonProps {
   color: string;
@@ -14,14 +15,30 @@ export default function ValueButton({
   text,
   handleCardActions,
 }: ValueButtonProps) {
+  const { theme } = useTheme();
+  const [whileHover, setWhileHover] = useState({ val: false, type: "" });
+
   return (
-    <Button
-      onClick={() => handleCardActions(val)}
-      variant="solid"
-      _hover={{ bg: color }}
-    >
-      {text}
-      {/* Perfect 🧠 */}
-    </Button>
+    <>
+      <motion.div
+        onClick={() => handleCardActions(val)}
+        onHoverStart={() => setWhileHover({ val: true, type: text })}
+        onHoverEnd={() => setWhileHover({ val: false, type: "" })}
+      >
+        <motion.button
+          animate={{
+            y: whileHover.val && whileHover.type === text ? -2 : 0,
+            background:
+              whileHover.val && whileHover.type === text
+                ? color
+                : "transparent",
+            color: whileHover.val && whileHover.type === text ? "#ffffff" : "",
+          }}
+          style={theme.studyCard.valueButton}
+        >
+          {text}
+        </motion.button>
+      </motion.div>
+    </>
   );
 }

@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 
 interface AuthLayoutProps {
-  children: any;
+  children: JSX.Element;
   title: string;
   subtitle: string;
 }

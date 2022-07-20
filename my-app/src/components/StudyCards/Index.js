@@ -1,28 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
 import dayjs from "dayjs";
 import { supermemo, SuperMemoItem, SuperMemoGrade } from "supermemo";
-import CustomTooltip from "../Util/CustomTooltip";
-import {
-  Grid,
-  Heading,
-  Spinner,
-  IconButton,
-  Flex,
-  Box,
-  Icon,
-  Button,
-  useColorModeValue,
-  HStack,
-} from "@chakra-ui/react";
+import { Flex, Box, HStack, Divider } from "@chakra-ui/react";
 //Components
+import FeedbackLayout from "./FeedbackLayout";
 import HowToUse from "./HowToUse";
 import ValueButtons from "./ValueButtons";
 import NavButton from "../Navbar/NavButton";
 import TitleDisplay from "../CollectionsNew/CollectionCard/TitleDisplay";
+import CardDisplay from "./CardDisplay";
+import StudyCompleted from "./StudyCompleted";
 
 function practice(flashcard, grade) {
-  console.log("Flashcard", flashcard);
   const { interval, repetition, efactor } = supermemo(flashcard, grade);
   const dueDate = dayjs(Date.now()).add(interval, "day").toISOString();
 
@@ -49,15 +38,18 @@ export default function StudyCards({
   handleSaveStudy,
   setStudyCards,
 }) {
+  //Render buttons
   const [view, setView] = useState(false);
   //Always reviewe the first card of the array
   const cardVal = [0];
 
-  console.log("Study Mode", studyMode);
+  //Add a study timer
 
   const [initialCardVal, setInitialCardVal] = useState(0);
   useEffect(() => {
-    setInitialCardVal(studyCards.length);
+    if (studyMode) {
+      setInitialCardVal(studyCards.length);
+    }
   }, [studyMode]);
   useEffect(() => {
     //Progress
@@ -69,12 +61,6 @@ export default function StudyCards({
     console.log("initialCardVal", initialCardVal);
   }, [studyCards]);
 
-  console.log("Initial", initialCardVal);
-
-  console.log("Study Collection", studyCollection);
-
-  console.log("StudyCards", studyCards);
-
   /*
     - User cycles through cards
     - Two arrays 
@@ -83,18 +69,34 @@ export default function StudyCards({
     - We remove from the cards to study and push into the reviewed cards
   */
 
-  const [answerShadow, setAnswerShadow] = useState(false);
+  const [answerShadow, setAnswerShadow] = useState({
+    shadowColor: "",
+    val: false,
+  });
   //use Effect that sets opacity back to false
   const handleAnswerShadow = (val) => {
-    setAnswerShadow(true);
+    let color;
+    const colors = [
+      "0px 0px 5px 2px #E53E3E",
+      "0px 0px 5px 2px #E53E3E",
+      "0px 0px 5px 2px #DD6B20",
+      "0px 0px 5px 2px #48BB78",
+      "0px 0px 5px 2px #48BB78",
+      "0px 0px 5px 2px #805AD5",
+    ];
+    color = colors[val];
+    console.log("color", color);
+    setAnswerShadow({ shadowColor: color, val: true });
   };
   useEffect(() => {
-    if (answerShadow) {
-      setTimeout(() => setAnswerShadow(false), 3000);
+    //Find colors with val = colors[val]
+
+    if (answerShadow.val === true) {
+      setTimeout(() => setAnswerShadow({ shadowColor: "", val: false }), 600);
     }
   }, [answerShadow]);
 
-  console.log("Answer shadow", answerShadow);
+  // console.log("Answer shadow", answerShadow);
 
   //Progress Val
   const [progressVal, setProgressVal] = useState();
@@ -102,7 +104,6 @@ export default function StudyCards({
     //depending on the val we set the ansewr shadow
     handleAnswerShadow(val);
 
-    console.log("ValSelected", val);
     // console.log("handle", cardsToReview);
     //Supermemo the card
     let newCard;
@@ -139,13 +140,13 @@ export default function StudyCards({
     //Only do this if the cards.length is not 0 i.e. the review is completed
     if (studyCards.length) {
       if (val < 3) {
-        alert("less than 3");
+        // alert("less than 3");
         //We want to set the cards to reviewe as the filtered cards and the new card
         setStudyCards([...filteredCards, newCard]);
       } else {
         //If value is correct but due date is less than 86400 we sent it back to the cards
         if (difference <= 86400) {
-          alert("less than a day");
+          // alert("less than a day");
           setStudyCards([...filteredCards, newCard]);
         } else {
           console.log("filtered", filteredCards);
@@ -159,60 +160,26 @@ export default function StudyCards({
     setView(false);
   };
 
-  // //Value Buttons
-  // const valueButtonArr = [0, 1, 2, 3, 4, 5];
-  // const valueButtonMarkup = valueButtonArr.map((val) => (
-  //   <Button key={val} onClick={() => handleCardActions(val)}>
-  //     {val}
-  //   </Button>
-  // ));
+  //Timer Feature
+  /*
+    -- get time now when opened
+    -- get time now when last card completed
+    -- find difference
+  
+  */
 
-  const studyCompletedMarkup = (
+  return (
     <>
-      <Flex flexDir={"column"}>
-        <Heading color="#fff" size="lg">
-          Review Completed
-        </Heading>
-        <Button onClick={() => handleSaveStudy()}>Save Progress</Button>
-      </Flex>
-    </>
-  );
-
-  //Color Mode
-  const color = useColorModeValue("font.light", "font.dark");
-  const background = useColorModeValue(
-    "background.subtleLight",
-    "background.subtleDark"
-  );
-
-  return studyCards.length !== 0 ? (
-    <>
-      <Box w="100%" position="relative" zIndex={0}>
-        <motion.div
-          style={{
-            zIndex: 0,
-            position: "absolute",
-            width: "100%",
-            padding: "20px",
-            minHeight: "75vh",
-            display: "flex",
-            flexDirection: "column",
-            borderRadius: "5px",
-            justifyContent: "space-between",
-            border: "1px solid grey",
-          }}
-        >
-          {/* <Flex
-        w={"100%"}
-        p={10}
-        minH="75vh"
-        boxShadow={"5px 5px 11px 9px rgba(53,255,24,0.44)"}
-        bg={background}
-        flexDir={"column"}
-        borderRadius="5px"
-        justify="space-between"
-      > */}
-          <Flex h="5%" justify="space-between" w="100%" alignItems={"center"}>
+      <FeedbackLayout answerShadow={answerShadow}>
+        {/* Header  */}
+        <Box>
+          <Flex
+            mb={6}
+            h="5%"
+            justify="space-between"
+            w="100%"
+            alignItems={"flex-start"}
+          >
             <TitleDisplay
               title={studyCollection.title}
               cardsDue={studyCards.length}
@@ -224,83 +191,32 @@ export default function StudyCards({
               </Box>
             </HStack>
           </Flex>
-          {/* //Study div  */}
-          <Flex align="center" h="90%" justify="center" flexDir={"column"}>
-            {view ? (
-              <Heading color={color} size="3xl">
-                {studyCards[cardVal].front}
-              </Heading>
-            ) : (
-              <Heading color={color} size="3xl">
-                {studyCards[cardVal].back}
-              </Heading>
-            )}
-            <Heading size="sm">{studyCards[0].dueDate}</Heading>
-            {/* Completion bar - total number of cards/remaining   
-            //Set inital number of cards when opened
-          */}
-
-            <motion.div
-              style={{
-                position: "relative",
-                marginTop: "20px",
-                width: "200px",
-                height: "10px",
-                background: "gray",
-                borderRadius: "10px",
-              }}
-            >
-              <motion.div
-                style={{
-                  position: "absolute",
-                  height: "100%",
-                  background: "green",
-                  borderRadius: "10px",
-                }}
-                initial={{ width: "0%" }}
-                animate={{
-                  width: `${progressVal}%`,
-                  transition: { duration: 1 },
-                }}
-              />
-            </motion.div>
-
-            {/* If correct put an effect on the border of the card  */}
-
-            {/* show the number of cards remaining  */}
-          </Flex>
-          {/* Button Div  */}
-          <ValueButtons
-            handleCardActions={handleCardActions}
+          <Divider />
+        </Box>
+        {/* Study div  */}
+        {studyCards.length !== 0 ? (
+          <CardDisplay
+            progressVal={progressVal}
+            studyCards={studyCards}
             view={view}
-            setView={setView}
           />
-        </motion.div>
-        {/* If an answer is correct we set the box boxShadow and opacity properties to show feedback  */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{
-            opacity: answerShadow ? 1 : 0,
-            transition: { duration: 0.2 },
-          }}
-          style={{
-            zIndex: -1,
-            position: "absolute",
-            width: "100%",
-            padding: "20px",
-            minHeight: "75vh",
-            display: "flex",
-            boxShadow: "5px 5px 11px 10px rgba(53,255,24,0.44)",
-            flexDirection: "column",
-            borderRadius: "5px",
-            justifyContent: "space-between",
-            border: "1px solid grey",
-          }}
-        />
-      </Box>
-      {/* </Flex> */}
+        ) : (
+          <StudyCompleted handleSaveStudy={handleSaveStudy} />
+        )}
+        {/* Buttons  */}
+        <Box>
+          {studyCards.length !== 0 ? (
+            <>
+              <Divider mb={6} />
+              <ValueButtons
+                handleCardActions={handleCardActions}
+                view={view}
+                setView={setView}
+              />
+            </>
+          ) : null}
+        </Box>
+      </FeedbackLayout>
     </>
-  ) : (
-    studyCompletedMarkup
   );
 }

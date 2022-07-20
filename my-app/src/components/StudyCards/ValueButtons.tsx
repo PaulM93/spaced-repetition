@@ -19,46 +19,52 @@ export default function ValueButtons({
   const valueButtonArr = [
     {
       val: 0,
-      text: "Blackout",
-      color: "red",
+      text: "Blackout 😭",
+      color: "#322659",
     },
     {
       val: 1,
-      text: "Almost",
-      color: "red",
+      text: "Wrong 😨",
+      color: "#44337A",
     },
     {
       val: 2,
-      text: "Wrong",
-      color: "red",
+      text: "Almost 🙁",
+      color: "#553C9A",
     },
     {
       val: 3,
-      text: "Correct",
-      color: "orange",
+      text: "Correct 😐",
+      color: "#6B46C1",
     },
     {
       val: 4,
-      text: "Easy",
-      color: "green",
+      text: "Easy 😉",
+      color: "#805AD5",
     },
     {
       val: 5,
-      text: "Perfect",
-      color: "green",
+      text: "Perfect 🤩",
+      color: "#9F7AEA",
     },
   ];
 
   return (
-    <Flex h="5%" w={"100%"} justify="center">
+    <Flex h="5%" w={"100%"} justify="center" position={"relative"}>
       {!view ? (
         <Box>
-          <Button variant="outline" onClick={() => setView(true)} size="md">
+          <Button
+            _hover={{ background: "#805AD5", color: "#fff" }}
+            fontSize="14px"
+            variant="outline"
+            onClick={() => setView(true)}
+            size="md"
+          >
             View answer
           </Button>
         </Box>
       ) : (
-        <HStack spacing={1}>
+        <HStack spacing={1} position="relative">
           {valueButtonArr.map((button) => (
             <ValueButton
               text={button.text}
