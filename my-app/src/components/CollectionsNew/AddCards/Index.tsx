@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 //Components
 import AddCards from "./AddCards";
 import EditCards from "../EditCards/EditCards";
+import CustomTooltip from "../../Util/CustomTooltip";
 import Footer from "./Footer";
 import {
   Modal,
@@ -134,6 +135,7 @@ export default function Index({
   };
 
   const handleClose = () => {
+    saveCollection();
     setViewAllCards(false);
     setCardAdded(false);
     setCardDetails(resetObject);
@@ -142,7 +144,6 @@ export default function Index({
 
   //Color Mode
   const color = useColorModeValue("font.light", "font.dark");
-
   const background = useColorModeValue(
     "background.subtleLight",
     "background.subtleDark"

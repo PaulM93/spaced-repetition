@@ -52,7 +52,7 @@ export default function ColorMode() {
           transition: { duration: 1 },
         }}
         style={{
-          zIndex: 100,
+          zIndex: 10,
           color: colorMode === "light" ? "#805AD5" : "white",
         }}
       >

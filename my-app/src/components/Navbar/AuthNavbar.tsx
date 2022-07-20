@@ -61,7 +61,6 @@ export default function AuthNavbar() {
         <Flex h="50%" width="100%" align="center" justify={"space-between"}>
           <HStack spacing={1}>
             <NavButton title={"Dashboard"} url={"/dashboard"} />
-            <NavButton title={"Settings"} url={"settings"} />
             <ColorMode />
           </HStack>
           <HStack>

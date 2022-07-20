@@ -58,6 +58,7 @@ exports.createCollection = (req, res) => {
       description: req.body.description,
       category: req.body.category,
       nextStudyDate: "",
+      lastStudyDate: "",
       cards: JSON.stringify([]),
     };
     //Where the user ID === the userID
@@ -89,11 +90,20 @@ exports.updateCollection = (req, res) => {
     const description = req.body.description;
     const category = req.body.category;
     const nextStudyDate = req.body.nextStudyDate;
+    const lastStudyDate = req.body.lastStudyDate;
     console.log("NextStudyDate gerer", nextStudyDate);
     const cards = JSON.stringify(req.body.cards); //stringify array
     let query =
-      "UPDATE collections SET title = ?, description = ?, category = ?, cards = ?, nextStudyDate = ? WHERE id = ?";
-    let data = [title, description, category, cards, nextStudyDate, id];
+      "UPDATE collections SET title = ?, description = ?, category = ?, cards = ?, nextStudyDate = ?, lastStudyDate = ? WHERE id = ?";
+    let data = [
+      title,
+      description,
+      category,
+      cards,
+      nextStudyDate,
+      lastStudyDate,
+      id,
+    ];
     db.query(query, data, (error, results, fields) => {
       if (error) {
         console.log(error);

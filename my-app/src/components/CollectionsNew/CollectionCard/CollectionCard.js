@@ -11,7 +11,6 @@ import AddEditCollection from "../AddEditCollection";
 import AddCards from "../AddCards/Index";
 
 import {
-  Box,
   Flex,
   HStack,
   GridItem,
@@ -31,6 +30,7 @@ export default function CollectionCard({ collection, handleStudyMode }) {
     cards: [],
     id: "",
     nextStudyDate: "",
+    lastStudyDate: "",
   });
 
   useEffect(() => {
@@ -41,6 +41,7 @@ export default function CollectionCard({ collection, handleStudyMode }) {
       cards: JSON.parse(collection.cards),
       id: collection.id,
       nextStudyDate: collection.nextStudyDate,
+      lastStudyDate: collection.lastStudyDate,
     });
   }, [collection]);
 
@@ -52,8 +53,6 @@ export default function CollectionCard({ collection, handleStudyMode }) {
       isClosable: true,
     });
   };
-
-  console.log("CollectionData CCard", collectionData);
 
   //We need to ensure the data here is fresh from a study session
 
@@ -72,10 +71,6 @@ export default function CollectionCard({ collection, handleStudyMode }) {
     // setCardsToBeSaved([...cardsToBeSaved, newCard]);
     setToast("success", "Card Added");
   };
-
-  // console.log("Cards to be saved", cardsToBeSaved);
-
-  // console.log("Collection data", collectionData);
 
   //Move this to the dashboard
   const saveCollection = () => {
@@ -110,20 +105,8 @@ export default function CollectionCard({ collection, handleStudyMode }) {
               <TitleDisplay
                 title={collection.title}
                 cardsDue={collection.cardsDue}
+                totalCards={collectionData.cards.length}
               />
-              <p>No: {collectionData.cards.length}</p>
-              <Box>
-                {/* <CustomTooltip label={"Change Order"}>
-                  <IconButton
-                    onClick={() => setOrderDisplay(true)}
-                    size="sm"
-                    cursor={"move"}
-                    colorScheme={"grey"}
-                    aria-label="Change Order"
-                    icon={<Icon mt={1} as={FiMoreVertical} />}
-                  />
-                </CustomTooltip> */}
-              </Box>
             </Flex>
           </Flex>
           <Flex>

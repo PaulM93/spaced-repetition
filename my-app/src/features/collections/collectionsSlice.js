@@ -117,7 +117,7 @@ export const collectionSlice = createSlice({
         state.isLoading = true;
       })
       .addCase(createCollection.fulfilled, (state, action) => {
-        // console.log("action", action.payload);
+        console.log("create action", action.payload);
         state.isLoading = false;
         state.isCreated = true;
         state.isSuccess = true;
@@ -126,6 +126,7 @@ export const collectionSlice = createSlice({
         state.collections.push(action.payload.collection);
       })
       .addCase(createCollection.rejected, (state, action) => {
+        console.log("create reject", action.payload);
         state.isLoading = false;
         state.isCreated = false;
         state.isError = action.payload;

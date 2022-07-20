@@ -128,6 +128,7 @@ export default function Collections(props) {
     const savedCollectionData = {
       ...studyCollection,
       //nextStudyDate
+      lastStudyDate: new Date(),
       nextStudyDate: sortedByDueDate[0].dueDate,
       cards: newCards,
     };

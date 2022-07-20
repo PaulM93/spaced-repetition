@@ -41,16 +41,18 @@ export default function Footer({
             >
               Add Card
             </Button>
-            <Button
+            {/* <Button
               isDisabled={!cardAdded}
-              colorScheme="green"
+              background="purple.800"
+              _hover={{ background: "purple.600" }}
+              color="white"
               onClick={() => saveCollection()}
               variant="solid"
               size="sm"
               mr={3}
             >
               Save
-            </Button>
+            </Button> */}
           </HStack>
         )}
       </Flex>

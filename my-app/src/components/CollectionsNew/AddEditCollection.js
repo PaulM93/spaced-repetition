@@ -60,6 +60,7 @@ export default function AddEditCollection({ type, collection }) {
         id: collection.id ? collection.id : "",
         cards: collection.cards ? collection.cards : [],
         nextStudyDate: collection.nextStudyDate ? collection.nextStudyDate : "",
+        lastStudyDate: collection.lastStudyDate ? collection.lastStudyDate : "",
       });
     }
   }, [isOpen]);

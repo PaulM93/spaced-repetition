@@ -18,7 +18,7 @@ export default function ReorderItem({ item, position }: Props) {
 
   return (
     <>
-      <Flex w="100%" height="100px" mb={2}>
+      {/* <Flex w="100%" height="100px" mb={2}>
         <Flex
           boxShadow={
             "rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px"
@@ -67,7 +67,7 @@ export default function ReorderItem({ item, position }: Props) {
             </Flex>
           </MotionContainer>
         </Reorder.Item>
-      </Flex>
+      </Flex> */}
     </>
   );
 }

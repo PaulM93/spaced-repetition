@@ -319,17 +319,19 @@ export const ThemeProvider = ({ children }) => {
         },
         authButton: {
           initial: {
+            zIndez: 0,
             fontWeight: 500,
             borderRadius: borderRadius,
             padding: "10px 20px 10px 20px",
             color: whiteMain,
             width: "100%",
             fontSize: "16px",
-            background: "purpleMain",
+            background: purpleMain,
             border: `1px solid ${purpleMain}`,
             position: "absolute",
           },
           hover: {
+            zIndez: -2,
             fontWeight: 500,
             borderRadius: borderRadius,
             width: "100%",

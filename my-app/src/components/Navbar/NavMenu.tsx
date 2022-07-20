@@ -23,15 +23,7 @@ export default function NavMenu({ signUserOut }: NavMenuProps) {
   );
   const color = useColorModeValue("font.light", "font.dark");
   const borderColor = useColorModeValue("#eaeaea", "border.darkSubtle");
-  const inputColor = useColorModeValue(
-    "input.border.light",
-    "input.border.dark"
-  );
-  const inputTextColor = useColorModeValue("font.light", "font.dark");
-  const focusColor = useColorModeValue(
-    "background.light",
-    "background.subtleDark"
-  );
+
   return (
     <Menu closeOnSelect={true}>
       <MenuButton>
@@ -42,6 +34,7 @@ export default function NavMenu({ signUserOut }: NavMenuProps) {
         />
       </MenuButton>
       <MenuList
+        zIndex={100}
         minWidth="240px"
         color={color}
         bg={background}
@@ -50,7 +43,7 @@ export default function NavMenu({ signUserOut }: NavMenuProps) {
         <Link to="/profile">
           <MenuItem
             fontWeight={500}
-            _focusWithin={{ bg: focusColor }}
+            _hover={{ background: "#805AD5", color: "#fff" }}
             autoFocus={false}
             fontSize="sm"
             icon={<FiUser />}
@@ -61,7 +54,7 @@ export default function NavMenu({ signUserOut }: NavMenuProps) {
         <MenuDivider borderColor={borderColor} />
         <MenuItem
           fontWeight={500}
-          _focusWithin={{ bg: focusColor }}
+          _hover={{ background: "#805AD5", color: "#fff" }}
           autoFocus={false}
           fontSize="sm"
           icon={<FiLogOut />}

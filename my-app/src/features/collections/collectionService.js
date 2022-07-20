@@ -15,7 +15,7 @@ const createNewCollection = async (collectionData, accessToken) => {
     collectionData,
     generateConfig(accessToken)
   );
-  // console.log("create res", response.data);
+  console.log("create res", response.data);
   return response.data;
 };
 
@@ -43,7 +43,6 @@ const editCollection = async (collectionData, accessToken) => {
 //Delete Collection
 const deleteCollection = async (id, accessToken) => {
   // console.log("DeleteData", id);
-  const url = "/user/collection/delete";
   const data = { id: id };
   // console.log(url);
   const response = await axios.post(

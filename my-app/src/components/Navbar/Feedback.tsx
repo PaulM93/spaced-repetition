@@ -71,6 +71,7 @@ export default function Feedback() {
   return (
     <Popover placement="bottom" autoFocus={false}>
       <motion.div
+        style={{ zIndex: 50 }}
         onHoverStart={() => setWhileHover(true)}
         onHoverEnd={() => setWhileHover(false)}
       >
