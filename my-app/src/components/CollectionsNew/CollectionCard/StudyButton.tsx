@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Tooltip, Box } from "@chakra-ui/react";
+import { Button, Box } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import CustomTooltip from "../../Util/CustomTooltip";
@@ -31,9 +31,7 @@ export default function StudyButton({
       label={
         collectionData.cards.length !== 0
           ? cardsDue === 0
-            ? `Next study session in ${dayjs(new Date(nextStudyDate)).fromNow(
-                true
-              )}`
+            ? `Next study session ${dayjs(nextStudyDate).fromNow()}`
             : ""
           : "There are no study cards in this collection."
       }

@@ -110,7 +110,7 @@ export default function CollectionCard({ collection, handleStudyMode }) {
             </Flex>
           </Flex>
           <Flex>
-            <LastStudied lastStudied={"1 day ago"} />
+            <LastStudied lastStudied={collection.lastStudyDate} />
           </Flex>
           <Flex justify={"space-between"}>
             <HStack spacing={1}>

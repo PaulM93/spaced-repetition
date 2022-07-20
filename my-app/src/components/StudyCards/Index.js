@@ -99,7 +99,8 @@ export default function StudyCards({
   // console.log("Answer shadow", answerShadow);
 
   //Progress Val
-  const [progressVal, setProgressVal] = useState();
+  const [progressVal, setProgressVal] = useState(0);
+  console.log("Progress val", progressVal);
   const handleCardActions = (val) => {
     //depending on the val we set the ansewr shadow
     handleAnswerShadow(val);

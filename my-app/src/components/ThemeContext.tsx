@@ -63,11 +63,13 @@ export const ThemeProvider = ({ children }) => {
         progressBarHidden: {
           position: "absolute",
           height: "100%",
+          width: "0%",
           background: "linear-gradient(to right, #805AD5, #5E23E3)",
           borderRadius: "3px",
         },
         valueButton: {
           background: "transparent",
+
           color: whiteMain,
           border: "1px solid #262626",
           padding: "7px 15px 7px 15px",
@@ -224,9 +226,9 @@ export const ThemeProvider = ({ children }) => {
         },
         progressBarHidden: {
           position: "absolute",
+          width: "0%",
           height: "100%",
-          background:
-            "-webkit-linear-gradient(left, #805AD5, #5E23E3), -webkit-linear-gradient(left, #805AD5, #5E23E3), -moz-linear-gradient(left, #805AD5, #5E23E3), linear-gradient(to right, #805AD5, #5E23E3)",
+          background: "linear-gradient(to right, #805AD5, #5E23E3)",
           borderRadius: "3px",
         },
         valueButton: {
