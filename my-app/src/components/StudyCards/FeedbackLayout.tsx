@@ -20,7 +20,7 @@ export default function FeedbackLayout({
   console.log("Box shadow", answerShadow.shadowColor);
 
   return (
-    <Box w="100%" position="relative" zIndex={0}>
+    <Box w="100%" position="relative" zIndex={0} minH={"80vh"}>
       <motion.div style={theme.studyCard.visible}>{children}</motion.div>
       <motion.div
         initial={{ opacity: 0 }}
@@ -32,7 +32,8 @@ export default function FeedbackLayout({
           zIndex: -1,
           position: "absolute",
           width: "100%",
-          minHeight: "75vh",
+          minHeight: "100%",
+          // minHeight: "75vh",
           boxShadow: `${answerShadow.shadowColor}`,
           // boxShadow: `5px 5px 11px 10px ${answerShadow.shadowColor}`,
           borderRadius: "10px",

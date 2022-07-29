@@ -9,6 +9,7 @@ import StudyButton from "./StudyButton";
 import DeleteButton from "./DeleteButton";
 import AddEditCollection from "../AddEditCollection";
 import AddCards from "../AddCards/Index";
+import Category from "./Category";
 
 import {
   Flex,
@@ -106,6 +107,10 @@ export default function CollectionCard({ collection, handleStudyMode }) {
                 title={collection.title}
                 cardsDue={collection.cardsDue}
                 totalCards={collectionData.cards.length}
+              />
+              <Category
+                category={collection.category}
+                description={collection.description}
               />
             </Flex>
           </Flex>

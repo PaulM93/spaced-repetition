@@ -14,17 +14,16 @@ import {
   PopoverBody,
   PopoverFooter,
   Flex,
+  useToast,
   useColorModeValue,
 } from "@chakra-ui/react";
 //Components
 import FeedbackEmojis from "./FeedbackEmojis";
 
 export default function Feedback() {
+  const toast = useToast();
   //Color Mode
-  const background = useColorModeValue(
-    "background.light",
-    "background.subtleDark"
-  );
+  const background = useColorModeValue("#fff", "background.subtleDark");
   const color = useColorModeValue("font.light", "font.dark");
   const borderColor = useColorModeValue(
     "border.lightSubtle",
@@ -65,7 +64,13 @@ export default function Feedback() {
 
   const handleSubmit = () => {
     console.log(data);
-    alert("Not working atm");
+    toast({
+      title: "Sorry :(",
+      description: "Feedback is unable to be sent right now.",
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+    });
   };
 
   return (

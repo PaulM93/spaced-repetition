@@ -22,7 +22,9 @@ import {
   Input,
   FormLabel,
   Textarea,
+  FormHelperText,
   useColorModeValue,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 
@@ -39,13 +41,14 @@ export default function AddEditCollection({ type, collection }) {
   );
 
   useEffect(() => {
+    errorReset();
     onClose();
     // resetUpdate();
     clearFields();
   }, [isUpdated, isCreated, onClose]);
 
   const [collectionData, setCollectionData] = useState({
-    title: "",
+    title: "dd",
     description: "", //limit length
     category: "", //limit length,
   });
@@ -65,12 +68,37 @@ export default function AddEditCollection({ type, collection }) {
     }
   }, [isOpen]);
 
+  const [errors, setErrors] = useState({
+    title: {
+      val: false,
+      message: "A title is required",
+    },
+    category: {
+      val: false,
+      message: "",
+    },
+  });
+  const errorReset = () => {
+    const errorResetObj = {
+      title: {
+        val: false,
+        message: "A title is required",
+      },
+      category: {
+        val: false,
+        message: "",
+      },
+    };
+    setErrors(errorResetObj);
+  };
+
   const clearFields = () => {
     const resetObj = {
       title: "",
       description: "",
       category: "",
     };
+    errorReset();
     setCollectionData(resetObj);
   };
 
@@ -81,20 +109,46 @@ export default function AddEditCollection({ type, collection }) {
     });
   };
 
+  const handleValidation = () => {
+    let fields = collectionData;
+    let errors = {};
+    let formIsValid = true;
+    // const fieldArr = ["title", "category"];
+    const fieldArr = [
+      { type: "title", val: true, message: "Please enter a title" },
+      { type: "category", val: true, message: "hdfdselo" },
+    ];
+    console.log("fields", fields);
+    fieldArr.map((i) => {
+      console.log(fields[i.type]);
+      if (fields[i.type] === "") {
+        formIsValid = false;
+        return {
+          errors: { title: { val: fields[i].val, message: fields[i].message } },
+        };
+      }
+    });
+    alert("here");
+    // console.log("errors", errors);
+    setErrors(errors);
+    // return formIsValid;
+    return formIsValid;
+  };
+  console.log("There are the errors", errors);
+  const [categoryError, setCategoryError] = useState(false);
   const handleSubmit = () => {
-    if (collectionData.title !== "" && collectionData.category !== "") {
+    // if (collectionData.category.length < 15) {
+    if (handleValidation()) {
       if (type === "add") {
-        // console.log("Collection", collectionData);
         dispatch(createCollection(collectionData));
       }
       if (type === "edit") {
-        // alert("edit from modal activated");
         dispatch(editCollection(collectionData));
       }
-    } else {
-      //Set errors ie.. title or category not filled
-      alert("error");
     }
+    // } else {
+    //   setCategoryError(true);
+    // }
   };
 
   const [onHover, setOnHover] = useState(false);
@@ -172,7 +226,7 @@ export default function AddEditCollection({ type, collection }) {
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
-            <FormControl>
+            <FormControl isInvalid={errors.title.val}>
               <FormLabel fontSize={"sm"}>Title</FormLabel>
               <Input
                 variant="outline"
@@ -185,8 +239,15 @@ export default function AddEditCollection({ type, collection }) {
                 placeholder="Enter collection title..."
                 size="md"
               />
+              {errors.title ? (
+                <FormErrorMessage color="red.500" size="sm">
+                  A title is required.
+                </FormErrorMessage>
+              ) : (
+                ""
+              )}
             </FormControl>
-            <FormControl mt={4}>
+            <FormControl mt={4} isInvalid={errors.category.val}>
               <FormLabel fontSize={"sm"}>Category</FormLabel>
               <Input
                 variant="outline"
@@ -199,8 +260,19 @@ export default function AddEditCollection({ type, collection }) {
                 placeholder="Enter collection category..."
                 size="md"
               />
+              {errors.category ? (
+                <FormErrorMessage color="red.500" size="sm">
+                  A category is required.
+                </FormErrorMessage>
+              ) : !categoryError ? (
+                <FormHelperText size="sm">15 character max</FormHelperText>
+              ) : (
+                <FormErrorMessage color="red.500" size="sm">
+                  15 character max
+                </FormErrorMessage>
+              )}
             </FormControl>
-            <FormControl mt={4}>
+            <FormControl mt={4} isInvalid={categoryError}>
               <FormLabel fontSize={"sm"}>Description</FormLabel>
               <Textarea
                 variant="outline"

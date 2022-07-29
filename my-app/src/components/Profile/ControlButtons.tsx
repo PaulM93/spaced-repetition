@@ -16,7 +16,7 @@ export default function ControlButtons({
   const buttonColor = useColorModeValue("purple", "gray");
   const borderColor = useColorModeValue("#eaeaea", "#262626");
   const buttonArr = [
-    { title: "General", icon: <Icon as={FiUser} /> },
+    // { title: "General", icon: <Icon as={FiUser} /> },
     { title: "Settings", icon: <Icon as={FiTool} /> },
     { title: "Logout", icon: <Icon as={FiLogOut} /> },
   ];

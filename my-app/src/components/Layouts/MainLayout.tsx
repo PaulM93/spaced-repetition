@@ -111,7 +111,7 @@ export default function Layout({ children }) {
   return (
     <>
       <Flex
-        minHeight="100vh"
+        minHeight="120vh"
         minWidth="100%"
         background={bg}
         pb={20}

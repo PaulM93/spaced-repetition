@@ -10,14 +10,14 @@ interface LastStudiedProps {
 
 export default function LastStudied({ lastStudied }: LastStudiedProps) {
   dayjs.extend(relativeTime);
-  const lastStudiedFormatted = dayjs(lastStudied).fromNow();
-  return (
+
+  return lastStudied !== "" ? (
     <Flex align="center">
       {/* Depending on the when studied we change the status  i.e. 1 day is green , 2 days orange, bot studied red  */}
       <Text color="#1DB954" fontSize="xs" mr={2}>
-        Studied {lastStudiedFormatted}
+        Studied {dayjs(lastStudied).fromNow()}
       </Text>
       <Icon color="#1DB954" as={FiActivity} />
     </Flex>
-  );
+  ) : null;
 }

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Text } from "@chakra-ui/react";
 import { useTheme } from "../ThemeContext";
 import { motion } from "framer-motion";
 
@@ -6,6 +7,7 @@ interface ValueButtonProps {
   color: string;
   val: number;
   text: string;
+  mobText: string;
   handleCardActions: (val: number) => void;
 }
 
@@ -13,6 +15,7 @@ export default function ValueButton({
   color,
   val,
   text,
+  mobText,
   handleCardActions,
 }: ValueButtonProps) {
   const { theme } = useTheme();
@@ -36,7 +39,8 @@ export default function ValueButton({
           }}
           style={theme.studyCard.valueButton}
         >
-          {text}
+          <Text display={["none", "none", "block", "block"]}>{text}</Text>
+          <Text display={["block", "block", "none", "none"]}>{mobText}</Text>
         </motion.button>
       </motion.div>
     </>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import { supermemo, SuperMemoItem, SuperMemoGrade } from "supermemo";
-import { Flex, Box, HStack, Divider } from "@chakra-ui/react";
+import { Flex, Box, Stack, Divider } from "@chakra-ui/react";
 //Components
 import FeedbackLayout from "./FeedbackLayout";
 import HowToUse from "./HowToUse";
@@ -100,7 +100,6 @@ export default function StudyCards({
 
   //Progress Val
   const [progressVal, setProgressVal] = useState(0);
-  console.log("Progress val", progressVal);
   const handleCardActions = (val) => {
     //depending on the val we set the ansewr shadow
     handleAnswerShadow(val);
@@ -113,7 +112,7 @@ export default function StudyCards({
     } else {
       newCard = practice(studyCards[0], val);
     }
-    console.log("New card", newCard);
+    // console.log("New card", newCard);
     //Card ID
     const cardID = studyCards[cardVal].id;
     //Filter out the card that has been reviewed
@@ -127,10 +126,10 @@ export default function StudyCards({
     const dueDate = new Date(newCard.dueDate);
     //Differnece between due date and time right now -- if less than 86400 we push into cards again
     const difference = Math.trunc(dueDate - nowJav) / 1000; //divide by 1000 to match 86400
-    console.log("difference", difference);
+    // console.log("difference", difference);
 
     //Card viewed is filtered out
-    console.log("Filtered cards", filteredCards);
+    // console.log("Filtered cards", filteredCards);
     // setCardsToReview([...filteredCards, newCard]);
     // setStudyCollection({
     //   ...studyCollection,
@@ -142,7 +141,7 @@ export default function StudyCards({
     if (studyCards.length) {
       if (val < 3) {
         // alert("less than 3");
-        //We want to set the cards to reviewe as the filtered cards and the new card
+        //We want to set the cards to review as the filtered cards and the new card
         setStudyCards([...filteredCards, newCard]);
       } else {
         //If value is correct but due date is less than 86400 we sent it back to the cards
@@ -150,7 +149,7 @@ export default function StudyCards({
           // alert("less than a day");
           setStudyCards([...filteredCards, newCard]);
         } else {
-          console.log("filtered", filteredCards);
+          // console.log("filtered", filteredCards);
           //If correct and due date is more than 86400 we push to the reviewedcards
           setStudyCards([...filteredCards]);
           setReviewedCards([...reviewedCards, newCard]);
@@ -179,18 +178,19 @@ export default function StudyCards({
             h="5%"
             justify="space-between"
             w="100%"
-            alignItems={"flex-start"}
+            alignItems={["center", "center", "flex-start", "flex-start"]}
           >
             <TitleDisplay
               title={studyCollection.title}
+              totalCards={studyCollection.cards.length}
               cardsDue={studyCards.length}
             />
-            <HStack spacing={1}>
+            <Stack spacing={1} direction={["column", "column", "row", "row"]}>
               <HowToUse />
               <Box onClick={() => handleSaveStudy()}>
                 <NavButton title="Close and Save" url="" />
               </Box>
-            </HStack>
+            </Stack>
           </Flex>
           <Divider />
         </Box>

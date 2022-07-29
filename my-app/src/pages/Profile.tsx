@@ -32,7 +32,7 @@ export default function Profile() {
   };
 
   //Populate with data
-  const [selectedPage, setSelectedPage] = useState("General");
+  const [selectedPage, setSelectedPage] = useState("Settings");
   //UserDetails
   const [userDetails, setUserDetails] = useState<{
     username: string;

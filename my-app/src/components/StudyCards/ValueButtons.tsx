@@ -19,31 +19,37 @@ export default function ValueButtons({
   const valueButtonArr = [
     {
       val: 0,
+      mobText: "0 😭",
       text: "Blackout 😭",
       color: "#322659",
     },
     {
       val: 1,
+      mobText: "1 😨",
       text: "Wrong 😨",
       color: "#44337A",
     },
     {
       val: 2,
+      mobText: "2 🙁",
       text: "Almost 🙁",
       color: "#553C9A",
     },
     {
       val: 3,
+      mobText: "3 😐",
       text: "Correct 😐",
       color: "#6B46C1",
     },
     {
       val: 4,
+      mobText: "4 😐",
       text: "Easy 😉",
       color: "#805AD5",
     },
     {
       val: 5,
+      mobText: "5 🤩",
       text: "Perfect 🤩",
       color: "#9F7AEA",
     },
@@ -67,6 +73,7 @@ export default function ValueButtons({
         <HStack spacing={1} position="relative">
           {valueButtonArr.map((button) => (
             <ValueButton
+              mobText={button.mobText}
               text={button.text}
               color={button.color}
               val={button.val}
