@@ -4,6 +4,9 @@ const app = express();
 const cors = require("cors");
 app.use(cors());
 app.use(express.json());
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("build"));
+}
 //Middlewear
 const authenticateToken = require("./middleware/authenticateToken");
 //Port
